@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import "tailwindcss";
+
+a.active hr{
+    display: block;
+
+}
+
+*{
+    font-family: Outfit;
+}
+
+
+
+.lora-regular {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+ /* CSS riêng cho AboutBootstrapSection */
+
+:root{
+  --bg: #0b0b0d;              /* nền tối sang trọng */
+  --bg-soft:#121215;
+  --card:#141419;
+  --text:#e9eaee;             /* chữ chính */
+  --text-dim:#b8bac6;         /* chữ phụ */
+  --brand: #9aa4ff;           /* nhấn tinh tế */
+  --ring: rgba(154,164,255,.35);
+  --muted: #7c8196;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius-xl: 20px;
+  --radius-lg: 14px;
+  --space-1: .5rem;           /* 8px */
+  --space-2: 1rem;            /* 16px */
+  --space-3: 1.5rem;          /* 24px */
+  --space-4: 2rem;            /* 32px */
+  --space-5: 3rem;            /* 48px */
+}
+
+/* Wrapper */
+.about_component{
+  background: radial-gradient(1200px 800px at 10% -10%, rgba(154,164,255,.08), transparent),
+              radial-gradient(900px 600px at 90% 120%, rgba(88,228,190,.06), transparent),
+              var(--bg);
+  padding: var(--space-5) 0;
+  color: var(--text);
+}
+
+/* Video column */
+.video-fixed{ 
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.video-fixed video{
+  display:block; width:100%; height:auto; filter: saturate(1.05) contrast(1.02);
+  transition: transform .8s cubic-bezier(.22,.61,.36,1), filter .5s ease;
+}
+.video-fixed:hover video{ transform: scale(1.02); filter: saturate(1.1) contrast(1.05); }
+
+/* Right column content */
+/* .info_about_component{ } */
+
+.box_badge_about{ margin-top: var(--space-1); }
+.badge_about{
+  --bdg-bg: color-mix(in oklab, var(--brand) 18%, white 0%);
+  display:inline-block;
+  padding: .55rem 1rem;
+  border-radius: 999px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  background: linear-gradient(135deg, rgba(154,164,255,.28), rgba(154,164,255,.18));
+  color: var(--text);
+  box-shadow: 0 6px 16px rgba(154,164,255,.24), inset 0 0 0 1px rgba(255,255,255,.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.background_client_color{ background: linear-gradient(135deg, rgba(154,164,255,.28), rgba(154,164,255,.18)); }
+.background_client_color_hover:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(154,164,255,.28), inset 0 0 0 1px rgba(255,255,255,.1); }
+
+/* Typography */
+.font19{ font-size: clamp(0.95rem, .9rem + .2vw, 1.05rem); }
+.font18{ font-size: clamp(0.95rem, .9rem + .15vw, 1rem); }
+.font36{ font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem); }
+.font-weight-600{ font-weight: 600; }
+.line_height_120{ line-height: 1.2; }
+
+.title_client_template{
+  color: var(--text);
+  text-wrap: balance;
+  background: linear-gradient(180deg, #fff 0%, #dfe3ff 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  letter-spacing: .01em;
+}
+.color_client_primary{ color: var(--text); }
+.color_client_text{ color: var(--text-dim); }
+
+/* Intro paragraph */
+.col-12.col-lg-11.mb-3.font18 p{
+  color: var(--text-dim);
+  margin: 0 0 var(--space-3);
+}
+
+/* Feature list */
+.list-unstyled{ margin:0; padding:0; }
+.list-unstyled .mb-3{ margin-bottom: var(--space-2) !important; }
+
+.color_client_text .d-flex{
+  padding: .75rem; border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.03);
+  outline: none; position: relative;
+  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.color_client_text .d-flex::after{
+  content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 0 var(--ring); transition: box-shadow .2s ease;
+}
+.color_client_text .d-flex:hover{ transform: translateY(-2px); background: rgba(255,255,255,.05); }
+.color_client_text .d-flex:focus-visible::after{ box-shadow: 0 0 0 6px var(--ring); }
+
+/* Thumb */
+.me-3{ border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.me-3 img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+/* Utility: rounded-5 (đề phòng khi không include bootstrap) */
+.rounded-5{ border-radius: var(--radius-xl) !important; }
+.overflow-hidden{ overflow:hidden !important; }
+
+/* Spacing tweaks giống Bootstrap nhưng mềm hơn */
+.p-4{ padding: var(--space-3) !important; }
+.mt-4{ margin-top: var(--space-3) !important; }
+.mb-3{ margin-bottom: var(--space-2) !important; }
+.ps-lg-5{ padding-left: var(--space-5) !important; }
+
+/* Motion respect */
+@media (prefers-reduced-motion: reduce){
+  .video-fixed video, .color_client_text .d-flex{ transition: none !important; }
+}
+
+/* Light mode optional */
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f7f8fb; --bg-soft:#fff; --card:#fff; --text:#0e0f13; --text-dim:#333a55;
+    --brand:#4f5cff; --ring: rgba(79,92,255,.25); --muted:#5b6280;
+    --shadow: 0 10px 30px rgba(0,0,0,.08);
+  }
+  .about_component{
+    background: radial-gradient(1100px 700px at 0% -10%, rgba(79,92,255,.06), transparent),
+                radial-gradient(900px 600px at 100% 110%, rgba(62,201,160,.06), transparent),
+                var(--bg);
+  }
+  .color_client_text .d-flex{ background: rgba(0,0,0,.03); }
+  .color_client_text .d-flex:hover{ background: rgba(0,0,0,.05); }
+}
+
+
+
+/* Hết phần CSS riêng cho AboutBootstrapSection */
+
+
+@media(max-width:640px){
+  a.active{
+    background-color: black;
+    color: white;
+  }
+}
