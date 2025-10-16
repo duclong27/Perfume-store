@@ -32,7 +32,7 @@ import { assets } from "../assets/assets";
 // Quick brand config – chỉnh ở đây là thay toàn trang
 // ————————————————————————————————————————————————
 const brand = {
-  name: "Maison Lueur", // change this to your shop name
+  name: "ARVENA", // change this to your shop name
   tagline: "The essence of fragrance. Touching emotions.",
   founder: "Long Nguyen", // change founder name
   accent: "from-rose-200 via-pink-200 to-amber-100", // main gradient

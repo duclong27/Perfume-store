@@ -180,9 +180,9 @@ const RelatedProduct = ({ gender, excludeId }) => {
                                         name={item.name}
                                         variants={item.variants}
                                         image={item.image}
-                                      
-            isEnable={item.isEnable} // 👈 ép “Contact” nếu admin disable
-                                        
+
+                                        isEnable={item.isEnable} // 👈 ép “Contact” nếu admin disable
+
                                     />
                                     {/* Giá hiển thị */}
                                     {/* <div className="mt-2 text-center text-sm font-medium text-neutral-700">

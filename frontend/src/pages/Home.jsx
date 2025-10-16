@@ -29,7 +29,7 @@ const Home = () => {
         <BestSeller />
         <OurPolicy />
         <NewsletterBox />
-        {/* <AboutSectionBootstrap/> */}
+        
 
       </div>
 

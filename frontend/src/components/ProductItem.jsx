@@ -94,7 +94,7 @@ const ProductItem = ({ id, image, name, variants, currency, isEnable }) => {
       : "Single price";
 
   return (
-    <Link className="group text-gray-700 cursor-pointer"   to={`/product/${id}`}>
+    <Link className="group text-gray-700 cursor-pointer" to={`/product/${id}`}>
       <div className="rounded-2xl border border-white/10 bg-black/80 p-3 shadow-md hover:shadow-xl hover:border-white/20 transition">
         {/* Image + ribbon */}
         <div className="relative overflow-hidden rounded-xl bg-neutral-900/60 w-full h-120">

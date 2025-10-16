@@ -1,6 +1,4 @@
 
-
-// src/pages/MyOrders.jsx
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api.js";
 import { useSearchParams } from "react-router-dom";
@@ -68,8 +66,8 @@ function Toast({ show, title = "Thành công", message = "", tone = "success", o
     tone === "error"
       ? "bg-rose-600 ring-rose-700"
       : tone === "warn"
-      ? "bg-amber-600 ring-amber-700"
-      : "bg-emerald-600 ring-emerald-700";
+        ? "bg-amber-600 ring-amber-700"
+        : "bg-emerald-600 ring-emerald-700";
 
   return (
     <div className="fixed bottom-4 right-4 z-[1000]">
@@ -132,8 +130,8 @@ export default function MyOrders() {
           const rowsRaw = Array.isArray(payload?.rows)
             ? payload.rows
             : Array.isArray(payload)
-            ? payload
-            : [];
+              ? payload
+              : [];
           const mapped = rowsRaw.map(normalizeOrder);
 
           all = all.concat(mapped);
@@ -196,10 +194,10 @@ export default function MyOrders() {
         list.map((o) =>
           o.orderId === order.orderId
             ? {
-                ...o,
-                orderStatus: resp.orderStatus ?? "cancelled",
-                paymentStatus: resp.paymentStatus ?? "cancelled",
-              }
+              ...o,
+              orderStatus: resp.orderStatus ?? "cancelled",
+              paymentStatus: resp.paymentStatus ?? "cancelled",
+            }
             : o
         )
       );
@@ -305,11 +303,10 @@ export default function MyOrders() {
                     <button
                       disabled={!canCancel(o) || cancelingId === o.orderId}
                       onClick={() => onCancel(o)}
-                      className={`px-4 py-2 rounded-xl text-xl font-semibold transition ${
-                        canCancel(o) && cancelingId !== o.orderId
+                      className={`px-4 py-2 rounded-xl text-xl font-semibold transition ${canCancel(o) && cancelingId !== o.orderId
                           ? "bg-rose-600 text-white hover:brightness-110"
                           : "bg-slate-200 text-slate-500 cursor-not-allowed"
-                      }`}
+                        }`}
                     >
                       {cancelingId === o.orderId ? "Đang huỷ..." : "Huỷ đơn"}
                     </button>

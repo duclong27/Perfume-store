@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ShopContext } from "@/context/ShopContext";
-import { Search as SearchIcon, User2 } from "lucide-react"; 
+import { Search as SearchIcon, User2 } from "lucide-react";
 
 const SearchBar = () => {
   const { search, setSearch } = useContext(ShopContext);

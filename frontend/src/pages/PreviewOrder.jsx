@@ -263,58 +263,7 @@ export default function PreviewOrder() {
 
     const [placing, setPlacing] = useState(false);
 
-    // async function onPlaceOrder() {
-    //     if (preview?.hasAnyWarning) return; // chặn nếu có cảnh báo
-    //     setPlacing(true);
-    //     try {
-    //         const placePayload = {
-    //             ...payload, // dùng lại payload preview bạn đang có
-    //             paymentMethodCode: preview?.payment?.effective || paymentMethod,
-    //         };
 
-    //         const res = await api.post("/internal/v1/place", placePayload, {
-
-    //             headers: {
-    //                 "Idempotency-Key": crypto.randomUUID?.() || String(Date.now()),
-    //             },
-    //         });
-    //         console.log("res :", res)
-    //         const data = res?.data?.data || {};
-
-    //         switch (data.paymentMethodCode) {
-    //             case "COD":
-    //                 navigate(`/order/success/${data.orderId}`, {
-    //                     state: {
-    //                         orderId: data.orderId,
-    //                         paymentStatus: data.paymentStatus,
-    //                         message: data.message,
-    //                     },
-    //                 });
-    //                 break;
-
-    //             case "BANK_TRANSFER":
-    //                 navigate(`/order/success/${data.orderId}`, {
-    //                     state: {
-    //                         orderId: data.orderId,
-    //                         paymentStatus: data.paymentStatus,
-    //                         paymentInstructions: data.paymentInstructionsSnapshot,
-    //                     },
-    //                 });
-    //                 break;
-
-    //             case "VNPAY":
-    //                 window.location.href = data.paymentUrl;
-    //                 break;
-
-    //             default:
-    //                 alert("Phương thức thanh toán không hỗ trợ");
-    //         }
-    //     } catch (e) {
-    //         alert(e?.response?.data?.message || "Đặt hàng thất bại");
-    //     } finally {
-    //         setPlacing(false);
-    //     }
-    // }
 
 
     async function onPlaceOrder() {

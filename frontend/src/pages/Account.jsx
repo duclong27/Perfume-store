@@ -122,8 +122,8 @@ export default function AdminAccounts() {
         const rowsRaw = Array.isArray(payload?.rows)
           ? payload.rows
           : Array.isArray(payload)
-          ? payload
-          : [];
+            ? payload
+            : [];
         const mapped = rowsRaw.map(normalizeUser);
         if (!cancelled) setRowsAll(mapped);
       } catch (e) {
@@ -197,12 +197,12 @@ export default function AdminAccounts() {
       prev.map((x) =>
         x.userId === u.userId
           ? {
-              ...x,
-              isEnable: patch.hasOwnProperty("isEnable") ? patch.isEnable : x.isEnable,
-              roles:
-                patch.hasOwnProperty("roleNames") ? [...(patch.roleNames || [])] : [...(x.roles || [])],
-              __pending: true,
-            }
+            ...x,
+            isEnable: patch.hasOwnProperty("isEnable") ? patch.isEnable : x.isEnable,
+            roles:
+              patch.hasOwnProperty("roleNames") ? [...(patch.roleNames || [])] : [...(x.roles || [])],
+            __pending: true,
+          }
           : x
       )
     );
@@ -213,10 +213,10 @@ export default function AdminAccounts() {
       const normalized = updated
         ? normalizeUser(updated)
         : {
-            ...oldRow,
-            ...patch,
-            roles: patch.roleNames ?? oldRow.roles,
-          };
+          ...oldRow,
+          ...patch,
+          roles: patch.roleNames ?? oldRow.roles,
+        };
 
       setRowsAll((prev) =>
         prev.map((x) => (x.userId === u.userId ? { ...normalized, __pending: false } : x))
