@@ -23,7 +23,7 @@ const toInt = (x, def = 0) => {
     return Number.isInteger(n) ? n : def;
 };
 
-// Đọc giá hiện tại (ưu tiên salePrice -> price -> unitPrice)
+
 function readCurrentPrice(variant) {
     const cands = [variant?.salePrice ?? variant?.sale_price, variant?.price, variant?.unitPrice];
     for (const c of cands) {
@@ -42,15 +42,14 @@ export async function calcShippingFee({ address, subtotal, lines }, tx) {
     return subtotal >= 300000 ? 0 : 30000;
 }
 
-// Tính giảm giá/khuyến mãi (placeholder: 0)
+
 export async function calcDiscount({ userId, address, lines, subtotal, shippingFee }, tx) {
     return 0;
 }
 
-// Idempotency (placeholder: no-op). Bạn có thể lưu key vào bảng riêng để chống double-submit.
+
 export async function ensureIdempotency({ userId, idempotencyKey }, tx) {
-    // ví dụ:
-    // await OrderRequest.findOrCreate({ where: { userId, key: idempotencyKey }, transaction: tx });
+   
     return true;
 }
 
@@ -58,16 +57,16 @@ export async function ensureIdempotency({ userId, idempotencyKey }, tx) {
  * addOrderService
  * ========================================================================= */
 /**
- * Tạo đơn hàng an toàn (transaction + row lock).
+ * 
  *
  * @param {Object} payload
- * @param {number} payload.userId               - Bắt buộc
- * @param {number} payload.addressId            - Bắt buộc (địa chỉ thuộc user)
- * @param {string} [payload.source="cart"]      - "cart" | "buy_now"
- * @param {Array<{variantId:number, qty:number}>} [payload.items] - Bắt buộc nếu source = "buy_now"
- * @param {string} [payload.paymentMethod]      - (để dành, chưa lưu vào model Order hiện tại)
- * @param {string} [payload.note]               - Ghi chú đơn hàng
- * @param {string} [payload.idempotencyKey]     - Khoá idempotency (khuyến nghị gửi)
+ * @param {number} payload.userId             
+ * @param {number} payload.addressId            
+ * @param {string} [payload.source="cart"]      
+ * @param {Array<{variantId:number, qty:number}>} [payload.items] 
+ * @param {string} [payload.paymentMethod]     
+ * @param {string} [payload.note]              
+ * @param {string} [payload.idempotencyKey]     
  *
  * @returns {Promise<{orderId:number,status:string,grandTotal:number}>}
  */
@@ -86,7 +85,7 @@ export async function addOrderService({
     if (!addrId) throw new AppError("Invalid addressId", 400);
     if (source !== "cart" && source !== "buy_now") throw new AppError("Invalid source", 400);
 
-    // Chuẩn hoá items nếu là buy_now
+    
     let buyNowItems = [];
     if (source === "buy_now") {
         const arr = Array.isArray(items) ? items : [];
@@ -100,14 +99,14 @@ export async function addOrderService({
 
     const tx = await sequelize.transaction();
     try {
-        /* ---------------- 1) Validate địa chỉ (thuộc user) ---------------- */
+      
         const address = await Address.findOne({ where: { addressId: addrId, userId: uid }, transaction: tx });
         if (!address) throw new AppError("Invalid address", 400);
 
-        /* ---------------- 2) Xác định nguồn items ---------------- */
+   
         let reqLines = [];
         if (source === "cart") {
-            // Lấy giỏ của user
+          
             const cart = await Cart.findOne({ where: { userId: uid }, transaction: tx });
             if (!cart) throw new AppError("Cart is empty", 400);
 
@@ -339,12 +338,7 @@ export async function getOrderSummaryByIdService({
 
 
 
-/**
- * Lấy danh sách đơn của CHÍNH user (My Orders)
- * - Không join OrderItem (nhẹ, nhanh).
- * - Hỗ trợ phân trang (page, pageSize).
- * - Có thể kèm snapshot chuyển khoản khi BANK_TRANSFER (includePaymentInstructions = true).
- */
+
 export async function getOrdersByUserIdService({
     userId,
     page = 1,
@@ -377,8 +371,7 @@ export async function getOrdersByUserIdService({
         "createdAt",
         "paidAt",
         "shippingName",
-        // Nếu muốn hiển thị city/state ở danh sách, thêm 2 dòng dưới:
-        // "shippingCity", "shippingState",
+       
     ];
 
     if (includePaymentInstructions) {
@@ -490,9 +483,9 @@ export async function cancelOrderService({ userId, orderId, reason } = {}) {
         order.status = "cancelled";
         order.paymentStatus = "cancelled";
 
-        // (optional) prepend lý do vào note, giữ tổng <= 255 ký tự
+       
         if (trimmedReason) {
-            const ts = new Date().toISOString(); // log nhẹ timestamp vào note
+            const ts = new Date().toISOString();
             const prefix = `[CANCELLED BY CUSTOMER ${ts}] ${trimmedReason}`.slice(0, 200);
             const old = order.note || "";
             order.note = (prefix + (old ? ` | ${old}` : "")).slice(0, 255);
@@ -508,7 +501,7 @@ export async function cancelOrderService({ userId, orderId, reason } = {}) {
     }
 }
 
-// Helper chuẩn hoá trả về (giống style gọn cho FE)
+
 function summarize(model) {
     const o = model.get ? model.get({ plain: true }) : model;
     return {

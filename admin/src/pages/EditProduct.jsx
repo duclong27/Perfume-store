@@ -88,7 +88,7 @@ const Toggle = ({ checked, onChange, label }) => (
 export default function EditProduct({ prefill }) {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { state } = useLocation(); // <- nhận { imageUrl, imageSrc } từ trang trước
+    const { state } = useLocation();
 
     // ===== helpers giữ giống Add =====
     const genderOptions = useMemo(
@@ -109,7 +109,7 @@ export default function EditProduct({ prefill }) {
         if (!s) return undefined;
         const t = String(s).trim();
         if (!t) return undefined;
-        if (/^(https?:\/\/|data:)/i.test(t)) return t; // absolute/data: -> giữ nguyên
+        if (/^(https?:\/\/|data:)/i.test(t)) return t; 
         return t.startsWith("/images/") ? t : `/images/${t.replace(/^\/+/, "")}`;
     };
 
@@ -189,14 +189,14 @@ export default function EditProduct({ prefill }) {
         gender: "Unisex",
         description: "",
         isEnable: true,
-        imageFile: null, // File mới user chọn
-        imageUrl: "", // path tương đối ảnh hiện tại (nếu có)
+        imageFile: null, 
+        imageUrl: "", 
     });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [toast, setToast] = useState(null);
 
-    const [imagePreview, setImagePreview] = useState(null); // absolute URL preview
+    const [imagePreview, setImagePreview] = useState(null); 
     const initialRef = useRef(null);
 
     const updateField = (key, value) => setForm((f) => ({ ...f, [key]: value }));
@@ -214,7 +214,7 @@ export default function EditProduct({ prefill }) {
         }
 
         if (imageUrl) {
-            setForm((f) => ({ ...f, imageUrl })); // để khi không đổi ảnh vẫn giữ được ảnh cũ
+            setForm((f) => ({ ...f, imageUrl }));
         }
     }, [state]);
 
@@ -344,7 +344,7 @@ export default function EditProduct({ prefill }) {
             let headers = {};
 
             if (hasFile) {
-                // ----- UPDATE MULTIPART -----
+               
                 const fd = new FormData();
                 if (Number.isInteger(cid)) fd.append("categoryId", String(cid));
                 fd.append("name", name);
@@ -352,11 +352,11 @@ export default function EditProduct({ prefill }) {
                 if (description) fd.append("description", description);
                 fd.append("gender", gender);
                 fd.append("isEnable", isEnable ? "true" : "false");
-                fd.append("file", form.imageFile); // đúng tên field BE
+                fd.append("file", form.imageFile); 
                 payload = fd;
                 headers["Content-Type"] = "multipart/form-data";
             } else {
-                // ----- UPDATE JSON (không đổi ảnh) -----
+               
                 payload = {
                     name,
                     gender,
@@ -368,18 +368,18 @@ export default function EditProduct({ prefill }) {
 
                 const url = normImagePath(form.imageUrl);
                 if (url) {
-                    payload.imageUrl = url; // giữ ảnh cũ
+                    payload.imageUrl = url; 
                 } else {
-                    // nếu có nút xóa ảnh: payload.imageUrl = null;
+              
                 }
             }
 
             const res = await api.patch(`/api/product/updateProduct/${id}`, payload, { headers });
 
-            // ✅ KHÔNG navigate; show toast
+           
             setToast({ type: "success", message: "Update successfully" });
 
-            // Đồng bộ mốc đã lưu
+            
             const nextInit = {
                 categoryId: form.categoryId,
                 name: (form.name || "").trim(),
@@ -390,7 +390,7 @@ export default function EditProduct({ prefill }) {
                 imageUrl: form.imageUrl,
             };
 
-            // Nếu BE trả imageUrl mới → cập nhật lại preview & form
+           
             const returned = res?.data?.data || res?.data;
             const newImageUrl = returned?.imageUrl || returned?.image_url;
             if (newImageUrl) {
@@ -399,14 +399,13 @@ export default function EditProduct({ prefill }) {
                 const rel = normImagePath(newImageUrl);
                 setImagePreview(rel ? resolveUrl(rel) : null);
             } else {
-                // không đổi ảnh -> clear file đã chọn
+                
                 setForm((f) => ({ ...f, imageFile: null }));
             }
 
             initialRef.current = nextInit;
 
-            // (tuỳ chọn) auto-hide toast
-            // setTimeout(() => setToast(null), 3000);
+           
         } catch (err) {
             console.error(err);
             setToast({

@@ -13,7 +13,7 @@ export const getCartByUserIdController = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            data: cart, // dạng { cart: {...}, items: [...] } để toCartDTO xử lý
+            data: cart, 
         });
     } catch (err) {
         const status =

@@ -4,9 +4,7 @@ import { api } from "../App";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-/* --------------------------------------------------------------------------
-   UI atoms (giống Orders)
--------------------------------------------------------------------------- */
+
 const Label = ({ htmlFor, children, className = "" }) => (
     <label htmlFor={htmlFor} className={"mb-2 block text-xl font-medium text-white " + className}>
         {children}
@@ -88,10 +86,10 @@ function roleFromAny(x) {
     if (typeof x === "string") return x.trim().toLowerCase();
 
     if (typeof x === "object") {
-        // thử các key phổ biến
+        
         const candidates = [
             x.roleName, x.rolename, x.name, x.role, x.code, x.key, x.slug, x.type,
-            // trường hợp join Sequelize: { Role: { name: "admin" } } hoặc { role: { name: "admin" } }
+            
             x?.Role?.name, x?.role?.name, x?.Role?.code, x?.role?.code,
         ].filter(Boolean);
 
@@ -103,7 +101,7 @@ function roleFromAny(x) {
     return "";
 }
 
-// helper: gom role đầu tiên từ tất cả field có thể có trên object user
+
 function firstRoleFromUser(u = {}) {
     const sources = [
         u.roles,        // ["admin"] hoặc [{roleName:"admin"}]
@@ -126,12 +124,12 @@ function firstRoleFromUser(u = {}) {
             const r = roleFromAny(src);
             if (r) { found.push(r); }
         }
-        if (found.length) break; // lấy cái đầu tiên
+        if (found.length) break; 
     }
 
     let role = found[0] || "";
     if (role && Array.isArray(ROLES)) {
-        role = ROLES.includes(role) ? role : ""; // lọc ngoài whitelist
+        role = ROLES.includes(role) ? role : ""; 
     }
     return role;
 }
@@ -146,7 +144,7 @@ export function normalizeUser(raw = {}) {
         email: raw.email ?? "",
         isEnable: !!raw.isEnable,
         createdAt: raw.createdAt ?? raw.created_at ?? null,
-        roles, // ← đảm bảo ["staff"] dạng string lowercase
+        roles, 
     };
 }
 
@@ -178,22 +176,22 @@ export default function AdminAccountPage() {
 
         const e = edits[u.userId];
 
-        // 1) Ưu tiên role đang chỉnh (edits)
+       
         let fromEdits = (typeof e?.role === "string" && e.role !== "") ? e.role.trim().toLowerCase() : "";
 
-        // 2) Nếu chưa có, lấy từ u.roles[0] (đã normalize) hoặc dò từ bảng liên kết/field khác
+        
         let fromUser =
             (Array.isArray(u.roles) && u.roles.length ? String(u.roles[0]).trim().toLowerCase() : "") ||
             firstRoleFromUser(u);
 
-        // 3) (tuỳ chọn) ép vào whitelist
+        
         if (fromEdits && Array.isArray(ROLES) && !ROLES.includes(fromEdits)) fromEdits = "";
         if (fromUser && Array.isArray(ROLES) && !ROLES.includes(fromUser)) fromUser = "";
 
         const role = fromEdits || fromUser || "";
         const isEnable = (typeof e?.isEnable === "boolean") ? e.isEnable : !!u.isEnable;
 
-        // LOG nhìn nguồn lấy role
+        
         console.log("[getDraft] resolve", {
             userId: u.userId,
             raw: {
@@ -239,7 +237,7 @@ export default function AdminAccountPage() {
 
                 const mapped = rowsRaw.map(normalizeUser);
 
-                // ✅ FIX: ép roles → string lowercase để khớp option của <select>
+                
                 const mappedFixed = mapped.map(u => ({
                     ...u,
                     roles: (u.roles || []).map(r => {
@@ -275,7 +273,7 @@ export default function AdminAccountPage() {
             });
         }
         if (roleFilter) {
-            // ✅ FIX: so sánh cùng lowercase
+     
             const rf = roleFilter.trim().toLowerCase();
             arr = arr.filter((u) => (u.roles || []).some(x => String(x).trim().toLowerCase() === rf));
         }
@@ -329,7 +327,7 @@ export default function AdminAccountPage() {
         }
         if (!patch.hasOwnProperty("isEnable") && !patch.hasOwnProperty("roleNames")) return;
 
-        // LẤY TOKEN NGAY TRƯỚC KHI GỌI API
+       
         const token = getToken();
         if (!token) {
             toast.error("NO_TOKEN · Vui lòng đăng nhập lại");
@@ -353,7 +351,7 @@ export default function AdminAccountPage() {
         );
 
         try {
-            // GẮN BEARER VÀO CHÍNH LỜI GỌI PATCH NÀY
+    
             const { data } = await api.patch(
                 `/api/account/updateAccount/${u.userId}`,
                 patch,
@@ -415,7 +413,7 @@ export default function AdminAccountPage() {
 
 
                     <div className="flex items-center gap-3">
-                        {/* 👇 Nút Add Account: navigate kèm state để prefill */}
+        
                         <Button
                             onClick={() =>
                                 navigate("/admin/addAccount", {

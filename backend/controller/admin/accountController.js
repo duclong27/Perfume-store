@@ -17,8 +17,8 @@ export const getAllAccountController = async (req, res) => {
             success: true,
             data: rows,
             total,
-            page: 1,          // không phân trang → cố định 1
-            limit: total,     // không phân trang → = tổng
+            page: 1,         
+            limit: total,     
         });
     } catch (err) {
         const status = err.status || err.statusCode || 500;

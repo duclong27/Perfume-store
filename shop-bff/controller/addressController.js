@@ -108,9 +108,9 @@ export async function setAddressDefaultController(req, res) {
         const raw = await setAddressDefaultService(userId, addressId);
         const d = raw?.data ?? raw;
 
-        // Có nơi trả object address, nơi trả true → handle cả 2
+        
         if (d && typeof d === "object") {
-            const base = unwrapAddressOne(d);     // vẫn unwrap phòng khi bọc
+            const base = unwrapAddressOne(d);     
             return res.status(200).json({ success: true, data: toAddressDTO(base) });
         }
         return res.status(200).json({ success: true, data: true });

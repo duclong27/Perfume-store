@@ -284,4 +284,3 @@ function Card({ title, value }) {
     </div>
   );
 }
-//22.4

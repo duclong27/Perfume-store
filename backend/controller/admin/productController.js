@@ -21,7 +21,7 @@ const addProductController = async (req, res) => {
             description,
             imageUrl,   
             isEnable,
-            image,      // legacy: mảng string
+            image,    
         } = req.body || {};
 
         const { product } = await addProductService({
@@ -30,10 +30,10 @@ const addProductController = async (req, res) => {
             brand,
             gender,
             description,
-            imageUrl,            // vẫn cho phép truyền URL có sẵn
+            imageUrl,            
             isEnable: toBool(isEnable),
             image,
-            file: req.file || null,  // ⬅️ quan trọng: truyền file vào service
+            file: req.file || null,  
         });
 
         return res.status(201).json({ success: true, data: product });
@@ -152,7 +152,7 @@ const setProductIsEnableController = async (req, res) => {
 
         return res
             .status(200)
-            .set("Cache-Control", "no-store") // tránh cache cho admin
+            .set("Cache-Control", "no-store") 
             .json({
                 success: true,
                 data,

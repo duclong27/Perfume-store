@@ -289,7 +289,7 @@ export async function updateOrderStatusAndPaymentStatusService(orderId, payload 
         throw e;
     }
 
-    // --- chuẩn hóa input: chỉ coi là thay đổi khi có giá trị thật (non-empty) ---
+
     const nextOrderStatusRaw = hasOrder ? payload.orderStatus : undefined;
     const nextPaymentStatusRaw = hasPay ? payload.paymentStatus : undefined;
 
@@ -301,7 +301,7 @@ export async function updateOrderStatusAndPaymentStatusService(orderId, payload 
         ? nextPaymentStatusRaw.trim().toLowerCase()
         : undefined;
 
-    // --- Enum guards (bẫy typo) ---
+
     if (hasOrder && nextOrderStatus && !FULFILL_ENUM.includes(nextOrderStatus)) {
         const e = new Error(`INVALID_ORDER_STATUS '${nextOrderStatus}'`);
         e.statusCode = 400;
@@ -316,7 +316,7 @@ export async function updateOrderStatusAndPaymentStatusService(orderId, payload 
     return await sequelize.transaction(
         { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED },
         async (t) => {
-            // lock row để tránh race condition
+           
             const order = await Order.findByPk(orderId, { transaction: t, lock: t.LOCK.UPDATE });
             if (!order) {
                 const e = new Error("ORDER_NOT_FOUND");

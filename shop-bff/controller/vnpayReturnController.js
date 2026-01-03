@@ -23,19 +23,18 @@ export async function vnpayReturnPostController(req, res) {
             hasSecureHash: !!merged?.vnp_SecureHash,
         });
 
-        // gọi Core
+    
         const coreResp = await vnpayReturnService(merged);
-        // coreResp có thể dạng { ok, status, orderId, message }
+      
         const { ok, status, orderId, message } = coreResp || {};
 
-        // ✅ chuẩn hoá thống nhất
         const unified = ok
             ? {
                 success: true,
                 data: {
                     orderId,
                     paymentMethodCode: "VNPAY",
-                    paymentStatus: status, // "paid" | "failed" | ...
+                    paymentStatus: status, 
                     message,
                 },
             }

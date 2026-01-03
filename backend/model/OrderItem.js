@@ -9,7 +9,7 @@ OrderItem.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      field: "order_item_id",   // ánh xạ cột DB
+      field: "order_item_id",   
     },
     orderId: {
       type: DataTypes.INTEGER,
@@ -39,9 +39,9 @@ OrderItem.init(
   },
   {
     sequelize,
-    modelName: "OrderItem",      // tên model trong code
-    tableName: "order_items",    // tên bảng trong DB
-    timestamps: false,           // bảng không có created_at/updated_at
+    modelName: "OrderItem",     
+    tableName: "order_items",    
+    timestamps: false,           
   }
 );
 export default OrderItem;

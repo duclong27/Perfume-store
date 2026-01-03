@@ -24,7 +24,7 @@ export default function Products({ }) {
   };
   const toBool = (x) => x === true || x === 1 || x === "1";
 
-  // Ưu tiên khoá “tự nhiên”; fallback tạm
+
   const makeKey = (raw, idx) =>
     String(
       raw.id ??
@@ -82,16 +82,16 @@ export default function Products({ }) {
     }
     skus = Array.from(new Set(skus)).sort();
 
-    // 1) Lấy field ảnh từ nhiều tên khác nhau
+
     const imageUrlLike =
       raw.imageUrl ??
-      raw.image_url ??                 // 👈 thêm snake_case
+      raw.image_url ??
       raw.img ??
       raw.image ??
-      (Array.isArray(raw.images) && raw.images[0]) ?? // 👈 nếu BE trả mảng
+      (Array.isArray(raw.images) && raw.images[0]) ??
       null;
 
-    // 2) Chuẩn hoá về path/absolute hợp lệ
+
     const imagePath = normalizeImagePath(imageUrlLike);
     const imageSrc = toImageSrc(imagePath || imageUrlLike);
 
@@ -100,18 +100,18 @@ export default function Products({ }) {
       __key: makeKey(raw, idx),
       id: raw.id ?? raw.productId ?? raw._id ?? null,
       name: raw.name ?? '',
-      // GIỮ cả 2:
-      imageUrl: imagePath,   // path tương đối chuẩn hoá (để lưu DB nếu cần)
-      imageSrc,              // absolute URL để render FE
+
+      imageUrl: imagePath,
+      imageSrc,
       category: raw.category ?? null,
       price: toNum(raw.price, 0),
       isEnable: toBool(raw.isEnable),
       brand: raw.brand ?? raw.brandName ?? null,
-      //
-      description: raw.description ?? '',          // <-- thêm
-      categoryId: raw.categoryId ?? raw.category ?? null, // <-- nếu form cần
 
-      //
+      description: raw.description ?? '',
+      categoryId: raw.categoryId ?? raw.category ?? null,
+
+
 
       skus,
     };
@@ -125,7 +125,7 @@ export default function Products({ }) {
     (async () => {
       try {
         const { data } = await api.get("api/product/getAllProduct");
-        // bắt các cấu trúc thường gặp
+
         const list = Array.isArray(data?.data)
           ? data.data
           : Array.isArray(data?.results)
@@ -171,21 +171,20 @@ export default function Products({ }) {
 
     const targetKey = target.__key ?? target.id ?? idOrKey;
     if (inflight.has(targetKey)) {
-      // đang có request cùng mục tiêu → bỏ qua
+
       return;
     }
 
-    // với API backend, cần id số (productId). Nếu không có thì không gọi API
+
     const productId = Number(target.id ?? target.productId);
     if (!Number.isFinite(productId) || productId <= 0) {
       console.error("toggleIsEnable: missing/invalid numeric productId for API", target);
-      // vẫn có thể cho phép flip local UI nếu muốn, nhưng khuyến nghị KHÔNG khi không có productId
+
       return;
     }
 
     const nextVal = !target.isEnable;
 
-    // optimistic update
     setProducts((prev) =>
       prev.map((p) => (matchByIdOrKey(p, idOrKey) ? { ...p, isEnable: nextVal } : p))
     );
@@ -193,22 +192,19 @@ export default function Products({ }) {
       prev && matchByIdOrKey(prev, idOrKey) ? { ...prev, isEnable: nextVal } : prev
     );
 
-    // mark inflight
+
     setInflight((s) => new Set(s).add(targetKey));
 
     try {
-      // Gửi true/false; backend parseBool đã support "true"/"1"
+
       await api.patch(`/api/product/updateIsEnableProduct/${productId}/is-enable`, { isEnable: nextVal });
 
-      // (tuỳ chọn) đồng bộ lại từ response nếu bạn trả data ở controller
-      // const { data } = await api.patch(...);
-      // const serverVal = !!data?.data?.isEnable;
-      // if (serverVal !== nextVal) { ... cập nhật lại ... }
+
 
     } catch (e) {
       console.error("toggleIsEnable failed:", e);
 
-      // rollback nếu lỗi
+
       setProducts((prev) =>
         prev.map((p) => (matchByIdOrKey(p, idOrKey) ? { ...p, isEnable: !nextVal } : p))
       );
@@ -216,8 +212,7 @@ export default function Products({ }) {
         prev && matchByIdOrKey(prev, idOrKey) ? { ...prev, isEnable: !nextVal } : prev
       );
 
-      // (tuỳ chọn) show toast lỗi
-      // toast.error(e?.response?.data?.message ?? "Toggle failed");
+
     } finally {
       setInflight((s) => {
         const n = new Set(s);
@@ -230,7 +225,7 @@ export default function Products({ }) {
 
 
 
-  // Xoá theo id hoặc __key
+
   const deleteProduct = (idOrKey) => {
     setProducts((prev) =>
       prev.filter((p) => (p.id ?? p.__key) !== idOrKey)
@@ -244,13 +239,13 @@ export default function Products({ }) {
 
 
 
-  // helper nhỏ: ép mọi thứ về string thường, tránh .toLowerCase() trên null/object
+
   const asText = (v) => {
     if (v == null) return "";
     if (typeof v === "string") return v.toLowerCase();
     if (typeof v === "number") return String(v).toLowerCase();
     if (typeof v === "object") {
-      // lấy tên/label phổ biến nếu category/brand là object
+
       return (
         (v.name || v.title || v.label || v.slug || v.code || v.sku || "")
           .toString()
@@ -263,7 +258,7 @@ export default function Products({ }) {
   const idText = (p) =>
     String(p.id ?? p.productId ?? p.__key ?? "").toLowerCase();
 
-  // ---- FILTER ĐƠN GIẢN, AN TOÀN ----
+
 
   const filteredProducts = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
@@ -342,14 +337,14 @@ export default function Products({ }) {
                     <td className="flex items-center gap-3 py-3">
                       {(p.imageSrc || p.imageUrl) ? (
                         <img
-                          // ưu tiên nguồn đã resolve sẵn nếu có, không thì dùng imageUrl
+
                           src={p.imageSrc || resolveUrl(p.imageUrl)}
                           alt={p.name || "Product"}
                           className="h-20 w-20 rounded-md object-contain bg-white/10 p-1"
                           loading="lazy"
                           onError={(e) => {
                             const el = e.currentTarget;
-                            // luôn lấy base từ imageUrl gốc để đổi đuôi cho đúng
+
                             const base = typeof p.imageUrl === "string" ? p.imageUrl : "";
 
                             if (/\.avif(\?.*)?$/i.test(base)) {
@@ -361,7 +356,7 @@ export default function Products({ }) {
                               return;
                             }
 
-                            // fallback cuối: placeholder và ngắt handler để tránh loop
+
                             el.onerror = null;
                             el.src = resolveUrl("/images/placeholder.png");
                           }}
@@ -386,7 +381,7 @@ export default function Products({ }) {
                         title={p.isEnable ? "Đang bật" : "Đang tắt"}
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleIsEnable(prodId); // giữ hợp đồng: truyền id/__key
+                          toggleIsEnable(prodId);
                         }}
                         className={`w-12 h-6 flex items-center rounded-full p-1 transition
             ${busy ? "opacity-60 cursor-not-allowed" : ""}
@@ -399,7 +394,7 @@ export default function Products({ }) {
                       </button>
                     </td>
 
-                    {/* Category (nếu có thể là object/string/number) */}
+
                     <td className="   text-slate-300">
                       {typeof p.category === "object"
                         ? (p.category?.name ?? p.category?.title ?? p.category?.label ?? "-")

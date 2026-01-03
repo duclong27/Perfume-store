@@ -20,7 +20,7 @@ export async function getOrderSummaryByIdController(req, res) {
 
         res.setHeader("Cache-Control", "no-store");
 
-        // Nếu chỉ cần payment_instructions_snapshot (BANK_TRANSFER)
+        
         if (onlyPI) {
             if (summary.paymentMethodCode !== "BANK_TRANSFER") {
                 return res
@@ -32,7 +32,7 @@ export async function getOrderSummaryByIdController(req, res) {
                     .status(404)
                     .json({ success: false, message: "Payment instructions snapshot not found." });
             }
-            // Trả đúng “tối giản” như bạn muốn: chỉ snapshot
+           
             return res.status(200).json({
                 success: true,
                 data: {
@@ -41,7 +41,7 @@ export async function getOrderSummaryByIdController(req, res) {
             });
         }
 
-        // Mặc định: trả full summary (dùng cho các trang khác nếu cần)
+   
         return res.status(200).json({ success: true, data: summary });
     } catch (e) {
         const status = e?.status || 500;

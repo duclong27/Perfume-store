@@ -2,7 +2,7 @@ import { NavLink, Link } from "react-router-dom";
 import { LayoutDashboard, Users, BarChart3, Package, ShoppingCart, Shield, LogOut, ListTree } from "lucide-react";
 
 export default function Sidebar() {
-    // helper: class cho NavLink đang active
+    
     const itemClass = ({ isActive }) =>
         `flex items-center gap-3 px-4 py-3 rounded-xl transition
      hover:bg-white/10 hover:text-white
@@ -10,7 +10,7 @@ export default function Sidebar() {
 
 
     const handleLogout = () => {
-        // 1) Xóa token ở cả local & session (liệt kê một số key phổ biến)
+        
         const tokenKeys = ["accessToken", "refreshToken", "jwt", "auth_token", "token", "user", "auth_user"];
         tokenKeys.forEach((k) => {
             try { localStorage.removeItem(k); } catch { }

@@ -21,5 +21,5 @@ export async function vnpayReturnService(queryOrBody) {
     // Nếu coreInternal đã tự gắn x-internal-key bằng interceptor thì KHÔNG cần headers ở đây.
     // Nếu CHƯA, thì dùng: { headers: { "x-internal-key": process.env.INTERNAL_KEY } }
     const { data } = await coreInternal.post("/vnpay/return", vnp);
-    return data; // giữ nguyên kiểu trả về như bạn làm với place
+    return data; 
 }

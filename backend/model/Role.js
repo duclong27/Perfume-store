@@ -13,7 +13,7 @@ Role.init(
     sequelize,
     modelName: "Role",
     tableName: "roles",
-    timestamps: false, // bảng không có created_at/updated_at
+    timestamps: false, 
   }
 );
 

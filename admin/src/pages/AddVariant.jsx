@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from '../App'             // đổi path cho đúng dự án của bạn
+import { api } from '../App'             
 import { toast } from "react-toastify";
 
 export default function AddVariant() {
@@ -20,7 +20,7 @@ export default function AddVariant() {
         (async () => {
             try {
                 setLoadingProducts(true);
-                // ⭐ đổi endpoint này theo backend của bạn
+                
                 const res = await api.get("/api/product/getAllProduct");
                 const raw = res?.data?.data ?? res?.data ?? [];
 
@@ -83,18 +83,18 @@ export default function AddVariant() {
             console.log("Submitting payload:", payload);
 
 
-            // ⭐ đổi endpoint theo backend của bạn
+           
             const res = await api.post("/api/productVariant/addVariantProduct", payload);
             const created = res?.data?.data ?? payload;
 
             toast.success("Variant created successfully 🎉");
 
-            // reset nhẹ
+   
             setSku("");
             setPrice("");
             setCapacityMl("");
             setStock("");
-            // giữ nguyên productId để tiện tạo tiếp
+     
         } catch (err) {
             const msg =
                 err?.response?.data?.message ||
@@ -127,8 +127,8 @@ export default function AddVariant() {
                         >
                             {products.map((p) => (
                                 <option
-                                    key={`prod-${p.product_id}`}      // 👈 luôn unique & không undefined
-                                    value={p.product_id}              // 👈 đúng id DB
+                                    key={`prod-${p.product_id}`}      
+                                    value={p.product_id}              
                                     className="bg-slate-900"
                                 >
                                     {p.name}

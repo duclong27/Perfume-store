@@ -40,7 +40,7 @@ import { passCoreError } from "../../utils/passCoreError.js";
 
 export const previewCheckoutController = async (req, res) => {
   try {
-    // userId (test Core chưa có auth)
+ 
     const rawUserId = req.body?.userId ?? req.query?.userId;
     const userId = Number(rawUserId);
     if (!Number.isInteger(userId) || userId <= 0) {
@@ -50,11 +50,11 @@ export const previewCheckoutController = async (req, res) => {
     const source = String(req.body?.source ?? "cart").toLowerCase();
     const items = Array.isArray(req.body?.items) ? req.body.items : undefined;
 
-    // address & snapshot
+    
     const addressId = req.body?.addressId ?? null;
     const shippingSnapshot = req.body?.shippingSnapshot ?? null;
 
-    // 🔴 BỊ THIẾU DÒNG NÀY
+    
     const paymentMethodCode = req.body?.paymentMethodCode ?? null;
 
     const data = await previewCheckoutService({
@@ -63,7 +63,7 @@ export const previewCheckoutController = async (req, res) => {
       items,
       addressId,
       shippingSnapshot,
-      paymentMethodCode, // ✅ truyền xuống service
+      paymentMethodCode, 
     });
 
     return res.status(200).json({ success: true, data });

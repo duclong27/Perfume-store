@@ -146,7 +146,7 @@ function allowedPaymentTargets(cur, method) {
     return Array.from(res);
 }
 function isLegacyPaidStatus(s) {
-    return String(s || "").toLowerCase() === "paid"; // fulfillment legacy—không render trong dropdown
+    return String(s || "").toLowerCase() === "paid";
 }
 
 /* --------------------------------------------------------------------------
@@ -155,26 +155,25 @@ function isLegacyPaidStatus(s) {
 export default function AdminOrdersAll() {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // state
+
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState("");
     const [orders, setOrders] = useState([]);
+    const [q, setQ] = useState(searchParams.get("q") || "");
 
-    // per-row draft edits { [orderId]: { orderStatus?, paymentStatus? } }
     const [edits, setEdits] = useState({});
-    // per-row pending API
-    const [pending, setPending] = useState({}); // { [orderId]: true/false }
+
+    const [pending, setPending] = useState({});
     const isRowPending = (id) => !!pending[id];
 
-    // filters (URL-sync q, sortBy, sortDir)
-    const [q, setQ] = useState(searchParams.get("q") || "");
+
     const [orderStatus, setOrderStatus] = useState(searchParams.get("status") || "");
     const [paymentStatus, setPaymentStatus] = useState(searchParams.get("pstatus") || "");
     const [paymentMethod, setPaymentMethod] = useState(searchParams.get("pm") || "");
     const [sortBy, setSortBy] = useState(searchParams.get("sortBy") || "createdAt");
     const [sortDir, setSortDir] = useState(searchParams.get("sortDir") || "desc");
 
-    // sync URL
+
     useEffect(() => {
         const sp = new URLSearchParams();
         if (q) sp.set("q", q);
@@ -186,7 +185,7 @@ export default function AdminOrdersAll() {
         setSearchParams(sp, { replace: true });
     }, [q, orderStatus, paymentStatus, paymentMethod, sortBy, sortDir, setSearchParams]);
 
-    // fetch all
+
     useEffect(() => {
         let cancelled = false;
         (async () => {
@@ -235,7 +234,7 @@ export default function AdminOrdersAll() {
         return () => { cancelled = true; };
     }, []);
 
-    // local search/filter/sort
+
     const filtered = useMemo(() => {
         let arr = orders;
         const nq = normalize(q);
@@ -296,22 +295,22 @@ export default function AdminOrdersAll() {
     };
 
     const validateDraft = (o, draft) => {
-        // Rule-based FE validation (khớp BE)
+
         const method = o.paymentMethodCode;
         const curFul = o.orderStatus;
         const curPay = o.paymentStatus;
         const nextFul = draft.orderStatus ?? curFul;
         const nextPay = draft.paymentStatus ?? curPay;
 
-        // Fulfillment
+
         const allowFul = allowedFulfillmentTargets(curFul, nextPay);
         const fulOk = nextFul === curFul || allowFul.includes(nextFul);
 
-        // Payment
+
         const allowPay = allowedPaymentTargets(curPay, method);
         const payOk = nextPay === curPay || allowPay.includes(nextPay);
 
-        // completed requires paid (redundant but explicit)
+
         const extraOk = !(nextFul === "completed" && nextPay !== "paid");
 
         return fulOk && payOk && extraOk;
@@ -332,16 +331,16 @@ export default function AdminOrdersAll() {
 
         if (!patch.orderStatus && !patch.paymentStatus) {
             toast.error("Không có thay đổi để lưu.");
-            return; // no-op
+            return;
         }
 
-        // FE validation
+
         if (!validateDraft(o, draft)) {
             toast.error("Thay đổi không hợp lệ theo rule. Vui lòng kiểm tra lựa chọn.");
             return;
         }
 
-        // Optimistic
+
         const oldRow = { ...o };
         setPending((p) => ({ ...p, [o.orderId]: true }));
         setOrders((prev) =>
@@ -351,14 +350,14 @@ export default function AdminOrdersAll() {
         );
 
         try {
-            // Sửa path cho khớp BE của bạn
+
             const { data } = await api.patch(`/api/order/updateOrder/${o.orderId}`, patch);
             const updated = (data && data.data) ? normalizeOrder(data.data) : { ...o, ...patch };
 
             setOrders((prev) =>
                 prev.map((x) => (x.orderId === o.orderId ? { ...x, ...updated, __pending: false } : x))
             );
-            // sync draft với dữ liệu mới → tránh “dirty” ảo
+
             setEdits((prev) => ({
                 ...prev,
                 [o.orderId]: { orderStatus: updated.orderStatus, paymentStatus: updated.paymentStatus }
@@ -366,7 +365,7 @@ export default function AdminOrdersAll() {
 
             toast.success(`Đã cập nhật đơn #${o.orderNumber}: ${describeChanges(oldRow, patch)}`);
         } catch (e) {
-            // Rollback
+
             setOrders((prev) =>
                 prev.map((x) => (x.orderId === o.orderId ? { ...oldRow, __pending: false } : x))
             );

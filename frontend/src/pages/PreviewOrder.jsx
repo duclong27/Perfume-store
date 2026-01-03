@@ -48,12 +48,12 @@ export default function PreviewOrder() {
     const [err, setErr] = useState(null);
     const [preview, setPreview] = useState(null);
 
-    // ====== Địa chỉ (saved) ======
+    
     const [addresses, setAddresses] = useState([]);
     const [addrLoading, setAddrLoading] = useState(true);
     const [addrErr, setAddrErr] = useState("");
 
-    // UI chọn nguồn: saved vs nhập tay
+   
     const [useSavedAddress, setUseSavedAddress] = useState(false);
     const [addressId, setAddressId] = useState(null);
 
@@ -76,7 +76,7 @@ export default function PreviewOrder() {
     const debounceRef = useRef(null);
     const busyRef = useRef(false);
 
-    // ====== NEW: Payment method state ======
+   
     const fallbackPaymentOptions = [
         { code: "COD", label: "Thanh toán khi nhận hàng" },
         { code: "BANK_TRANSFER", label: "Chuyển khoản ngân hàng" },
@@ -84,7 +84,7 @@ export default function PreviewOrder() {
     ];
     const [paymentMethod, setPaymentMethod] = useState("COD");
 
-    // ====== FETCH ADDRESSES (đúng form trước) ======
+   
     useEffect(() => {
         let cancelled = false;
         (async () => {
@@ -96,7 +96,7 @@ export default function PreviewOrder() {
                 const list = Array.isArray(raw) ? raw.map(normalizeAddress) : [];
                 if (!cancelled) {
                     setAddresses(list);
-                    // Luôn có default theo thiết kế của bạn → chọn default làm addressId
+                 
                     const def = list.find((a) => a.isDefault) ?? list[0] ?? null;
                     if (def) {
                         setUseSavedAddress(true);
@@ -383,7 +383,7 @@ export default function PreviewOrder() {
                             </div>
                         ) : (
                             <div className="relative z-10 px-6 py-5 grid grid-cols-1 gap-4">
-                                {/* form nhập tay giữ nguyên của bạn */}
+                       
                                 <div>
                                     <label className="block text-xl text-slate-700 mb-1">Full name <span className="text-rose-500">*</span></label>
                                     <input

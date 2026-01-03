@@ -9,10 +9,10 @@ export async function getCartByUserIdController(req, res) {
     const includeDetails =
       String(req.query?.includeDetails ?? "true").toLowerCase() !== "false";
 
-    // Proxy sang CORE
+
     const raw = await getCartByUserIdService(userId, { includeDetails });
 
-    // Map về DTO cho FE
+    
     const dto = toCartDTO(raw?.data ?? raw);
 
     return res.status(200).json({ success: true, data: dto });

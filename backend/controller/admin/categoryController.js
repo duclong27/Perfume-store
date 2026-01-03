@@ -12,7 +12,7 @@ import {
 const addCategoriesController = async (req, res) => {
   try {
     const { name, description } = req.body || {};
-    const { category } = await addCategoriesService({ name, description }); // <-- await + đúng key
+    const { category } = await addCategoriesService({ name, description }); 
     return res.status(201).json({ success: true, data: category });
   } catch (err) {
     const status =

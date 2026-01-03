@@ -93,7 +93,7 @@ PaymentTransaction.belongsTo(Order, { as: "order", foreignKey: "orderId", target
 
 
 
-// Export tất cả để nơi khác import dùng
+
 export {
   sequelize,
   User,

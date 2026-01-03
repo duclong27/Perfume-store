@@ -15,19 +15,19 @@ const placeholderColors = [
 
 export default function Categories() {
 
-  const [categories, setCategories] = useState([]); // ✅ mảng rỗng
+  const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [query, setQuery] = useState("");
 
-  // util: lấy chữ cái đầu cho avatar fallback
+
   const initialOf = (name = "") =>
     (name.trim()[0] || "?").toUpperCase();
 
-  // util: chuẩn hóa 1 item theo cấu trúc UI cần
+ 
   const normalizeCategory = (item) => {
-    // Ưu tiên đúng khóa từ DB
+   
     const category_id =
       item?.category_id ?? item?.categoryId ?? item?.CategoryId ?? item?._id ?? item?.id;
 
@@ -36,8 +36,8 @@ export default function Categories() {
     }
 
     return {
-      id: category_id,                // UI dùng id này = category_id thật
-      category_id,                    // giữ riêng để gọi API
+      id: category_id,            
+      category_id,                    
       name: item?.name ?? "Unnamed",
       description: item?.description ?? "",
       products: Number(item?.products ?? item?.productCount ?? item?.count ?? 0),
@@ -46,7 +46,7 @@ export default function Categories() {
   };
 
 
-  // gọi API getAllCategory khi mount
+
   useEffect(() => {
     let mounted = true;
 
@@ -54,7 +54,7 @@ export default function Categories() {
       setLoading(true);
       setErr("");
       try {
-        // 👉 sửa path này cho khớp backend của bạn
+       
         const res = await api.get("/api/category/getAllCategories");
         const raw = res?.data?.data ?? res?.data ?? [];
         const list = Array.isArray(raw) ? raw : raw.items ?? [];
@@ -106,7 +106,7 @@ export default function Categories() {
     }
   };
 
-  // filter for sreach bar
+ 
   const filteredCategories = useMemo(() => {
     if (!query.trim()) return categories;
     return categories.filter(
@@ -117,7 +117,7 @@ export default function Categories() {
   }, [categories, query]);
 
 
-  // màu placeholder avatar ổn định theo id
+  
   const colorOf = (id) => {
     if (id == null) return placeholderColors[0];
     const idx = Number.isFinite(+id) ? +id : [...String(id)].reduce((s, ch) => s + ch.charCodeAt(0), 0);
@@ -126,9 +126,9 @@ export default function Categories() {
 
   return (
     <div className="flex gap-6 h-full min-h-screen">
-      {/* LEFT: main content */}
+ 
       <div className="flex-1 space-y-6">
-        {/* Top bar (search + add) */}
+       
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 w-1/3">
             <Search className="h-5 w-5 text-slate-300" />

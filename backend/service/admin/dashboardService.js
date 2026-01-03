@@ -4,7 +4,7 @@ import { QueryTypes } from "sequelize";
 
 export async function getSummaryLast7DaysService() {
   const tz = "+07:00"; // VN timezone
-  // Lấy ngày hiện tại (UTC) rồi lùi 6 ngày để filter
+
   const [fromRow] = await sequelize.query(
     "SELECT DATE(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', :tz)) - INTERVAL 6 DAY as fromDate, DATE(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', :tz)) as toDate",
     { replacements: { tz }, type: QueryTypes.SELECT }

@@ -56,17 +56,13 @@ export const updateCartController = async (req, res) => {
 
 
 
-/**
- * DELETE /internal/cart/:userId/items/:cartItemId
- * Header: x-internal-key: <key>
- * Mục tiêu: BFF sẽ proxy vào đây; bạn cũng có thể test trực tiếp bằng Postman.
- */
+
 export const deleteCartItemController = async (req, res) => {
   try {
     const userId = Number(req.params?.userId);
     const cartItemId = Number(req.params?.cartItemId);
 
-    // (Tuỳ chọn) validate sớm để trả lỗi 4xx rõ ràng
+  
     if (!Number.isInteger(userId) || userId <= 0) {
       return res.status(400).json({ success: false, message: "Invalid userId" });
     }

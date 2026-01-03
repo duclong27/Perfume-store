@@ -19,6 +19,6 @@ export const createToken = (id, extra = {}) => {
   return jwt.sign(payload, process.env.JWT_SECRET, {
     algorithm: "HS256",
     expiresIn: "7d",
-    subject: String(uid), // để middleware nào đọc payload.sub vẫn thấy
+    subject: String(uid), 
   });
 };

@@ -83,7 +83,7 @@ export default function AddAccountPage() {
         setName(pre.name || "");
         setEmail(pre.email || "");
         setPassword(pre.password || "");
-        setConfirmPassword(pre.password || ""); // ← nếu có password truyền sẵn thì copy luôn
+        setConfirmPassword(pre.password || "");
         setIsEnable(typeof pre.isEnable === "boolean" ? pre.isEnable : true);
         setRole(Array.isArray(pre.roleNames) && pre.roleNames[0] ? pre.roleNames[0] : "");
     }, [state]);
@@ -122,8 +122,7 @@ export default function AddAccountPage() {
             });
 
             toast.success("Account created successfully 🎉");
-            // Tuỳ chọn: reset form để nhập tiếp
-            // setName(""); setEmail(""); setPassword(""); setConfirmPassword(""); setRole(""); setIsEnable(true);
+
         } catch (e) {
             const msg = e?.response?.data?.message || e.message || "Account created unsuccessfully";
             setErr(msg);

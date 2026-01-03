@@ -11,10 +11,10 @@ export async function authCustomerOnly(req, res, next) {
         }
 
         const payload = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = payload.sub || payload.id; // bạn đang sign { id }
+        const userId = payload.sub || payload.id; 
 
         const user = await User.findByPk(userId, {
-            attributes: ['userId', 'isEnable'], // nếu không có field này thì bỏ đi
+            attributes: ['userId', 'isEnable'], 
             include: [
                 {
                     model: Role,
@@ -29,7 +29,7 @@ export async function authCustomerOnly(req, res, next) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // DB lưu tinyint(1) 0/1 → vẫn check thêm boolean cho chắc
+       
         if (user.isEnable === false || user.isEnable === 0) {
             return res.status(403).json({ message: 'Account is disabled' });
         }
@@ -41,7 +41,7 @@ export async function authCustomerOnly(req, res, next) {
         const isCustomer = roles.includes('customer');
         const isStaffOrAdmin = roles.includes('staff') || roles.includes('admin');
 
-        // Chỉ cho customer; nếu account có cả staff/admin thì vẫn chặn
+    
         if (!isCustomer || isStaffOrAdmin) {
             return res.status(403).json({ message: 'Forbidden: customer only' });
         }

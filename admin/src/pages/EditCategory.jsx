@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,36 +9,30 @@ export default function EditCategory() {
     const navigate = useNavigate();
     const { state } = useLocation();
 
-    // Prefill nếu chuyển từ trang list
     const prefill = state?.categoryPrefill ?? null;
 
-    // ---- Form state ----
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
 
-    // ---- UI state ----
-    const [loading, setLoading] = useState(true);  // loading prefill/fetch
-    const [saving, setSaving] = useState(false);   // submitting PUT
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
     const [err, setErr] = useState("");
 
-    // Xác định có thay đổi dữ liệu hay chưa (để disable Save nếu chưa đổi gì)
     const dirty = useMemo(() => {
-        if (!prefill) return true; // nếu fetch từ API, bỏ check này hoặc so sánh với snapshot fetch được
-        return name !== (prefill.name ?? "") || description !== (prefill.description ?? "");
+        if (!prefill) return true;
+        return (
+            name !== (prefill.name ?? "") ||
+            description !== (prefill.description ?? "")
+        );
     }, [name, description, prefill]);
 
-
-
-
-
-    // ---- Load dữ liệu ban đầu ----
     useEffect(() => {
         let ignore = false;
 
         async function run() {
             try {
                 setErr("");
-                // Nếu có prefill từ state thì dùng luôn, không cần gọi API
+
                 if (prefill) {
                     if (ignore) return;
                     setName(prefill.name ?? "");
@@ -46,13 +41,12 @@ export default function EditCategory() {
                     return;
                 }
 
-                // Không có prefill => fetch theo id
                 if (!id) {
                     throw new Error("Thiếu tham số id trong URL.");
                 }
 
-                const res = await api.patch(`/api/category/updateCategory/${id}`); // <-- chỉnh endpoint cho đúng backend
-                const data = res.data; // { id, name, description, ... }
+                const res = await api.patch(`/api/category/updateCategory/${id}`);
+                const data = res.data;
 
                 if (ignore) return;
                 setName(data?.name ?? "");
@@ -76,9 +70,9 @@ export default function EditCategory() {
         };
     }, [id, prefill]);
 
-    // ---- Submit ----
     async function onSubmit(e) {
         e.preventDefault();
+
         if (!id) {
             toast.error("Thiếu id category.");
             return;
@@ -90,15 +84,15 @@ export default function EditCategory() {
 
         try {
             setSaving(true);
+
             const payload = {
                 name: name.trim(),
                 description: description.trim(),
-
             };
 
-            await api.patch(`/api/category/updateCategory/${id}`, payload); // <-- chỉnh endpoint nếu khác
+            await api.patch(`/api/category/updateCategory/${id}`, payload);
             toast.success("Đã lưu thay đổi.");
-            navigate(-1); // quay về trang trước; hoặc navigate("/admin/categories")
+            navigate(-1);
         } catch (e) {
             console.error(e);
             toast.error(
@@ -108,7 +102,6 @@ export default function EditCategory() {
             setSaving(false);
         }
     }
-
 
     function onCancel() {
         navigate(-1);
@@ -128,7 +121,6 @@ export default function EditCategory() {
                 <div className="py-10 text-center text-red-400">{err}</div>
             ) : (
                 <form className="space-y-10" onSubmit={onSubmit}>
-                    {/* Name */}
                     <div className="space-y-3">
                         <label className="text-2xl font-semibold text-slate-100">
                             Name
@@ -141,7 +133,6 @@ export default function EditCategory() {
                         />
                     </div>
 
-                    {/* Description */}
                     <div className="space-y-3">
                         <label className="text-2xl font-semibold text-slate-100">
                             Description
@@ -155,7 +146,6 @@ export default function EditCategory() {
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-4 pt-4">
                         <button
                             type="button"

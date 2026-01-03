@@ -7,5 +7,5 @@ export const sequelize = new Sequelize(process.env.DATABASE_URLSECOND, {
   logging: false,
 });
 
-// Export lại cho các file khác có thể dùng
+
 export { UniqueConstraintError };

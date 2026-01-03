@@ -47,7 +47,7 @@ export function buildPlaceCheckoutDTO({ body, userId }) {
 
 // /admin-backend/src/services/dto/previewDTO.js
 
-/* ===== Helpers giống phong cách DTO của bạn ===== */
+
 const toPlain = (x) => (x && typeof x.get === "function" ? x.get({ plain: true }) : x);
 
 const pick = (...args) => {
@@ -66,11 +66,11 @@ const toStringSafe = (x, fb = null) => {
     return s.length ? s : fb;
 };
 
-// biến URL tương đối thành absolute theo base
+
 function toAbsoluteImage(url, base) {
     if (!url) return null;
     try {
-        if (/^https?:\/\//i.test(url)) return url; // đã absolute
+        if (/^https?:\/\//i.test(url)) return url; 
         const cleanBase = (base || "").replace(/\/+$/, "");
         const cleanUrl = String(url).startsWith("/") ? url : `/${url}`;
         return `${cleanBase}${cleanUrl}`;
@@ -79,7 +79,7 @@ function toAbsoluteImage(url, base) {
     }
 }
 
-// Ưu tiên nhiều key ảnh (imageUrl, image_url, thumbnail, thumb, ...)
+
 function pickImageUrlRaw(obj) {
     return toStringSafe(
         pick(obj?.imageUrl, obj?.image_url, obj?.thumbnail, obj?.thumb, null),
@@ -87,7 +87,7 @@ function pickImageUrlRaw(obj) {
     );
 }
 
-// Preview dùng current price từ Variant (không snapshot)
+
 function readCurrentPrice(variant) {
     const n = Number(variant?.price);
     return Number.isFinite(n) && n >= 0 ? n : NaN;
@@ -99,19 +99,19 @@ function readCurrentPrice(variant) {
 export function toPreviewLineDTO(raw = {}) {
     const l = toPlain(raw);
 
-    // 0) ENV cho absolute ảnh
+    
     const assetBase =
         process.env.ASSET_BASE_URL ||
         process.env.FILE_BASE_URL ||
         "http://localhost:4000";
 
-    // 1) Lấy variant/product theo cách thường (eager-load)
+  
     let vRaw =
         toPlain(pick(l?.variant, l?.Variant, l?.productVariant, l?.ProductVariant, l?.meta?.variant, null)) || {};
     let pRaw =
         toPlain(pick(vRaw?.product, vRaw?.Product, l?.meta?.product, null)) || {};
 
-    // 2) Nếu không có include nhưng có meta phẳng -> dựng pseudo objects
+
     const m = l?.meta || {};
     const hasFlatMeta =
         m.productId != null ||
@@ -128,7 +128,7 @@ export function toPreviewLineDTO(raw = {}) {
             capacityMl: toNumberSafe(pick(m.capacityMl, m.capacity_ml, null), null),
             name: toStringSafe(pick(m.variantName, null), null),
             productId: toNumberSafe(m.productId, null),
-            // price nếu Core có gắn vào meta thì có thể đọc thêm ở đây
+    
         };
     }
 
@@ -253,16 +253,16 @@ export function toPreviewDTO(raw = {}) {
         }
         : null;
 
-    // ✅ passthrough payment (giữ nguyên cấu trúc Core trả về)
+   
     const payment = raw?.payment ?? null;
 
     return {
-        // 👇 giữ nguyên logic cũ, chỉ đổi về null nếu không hợp lệ
+       
         addressId: toNumberSafe(raw?.addressId, null),
-        addressSnapshot,                 // 👈 mới
+        addressSnapshot,                
         source: src,
 
-        // ❗ không động vào mapping lines (bao gồm image)
+    
         lines,
 
         totals: {
@@ -272,13 +272,13 @@ export function toPreviewDTO(raw = {}) {
             grandTotal: toNumberSafe(t?.grandTotal, 0),
         },
 
-        // ❗ giữ nguyên warnings/hasAnyWarning như logic hiện tại
+      
         warnings: Array.isArray(raw?.warnings) ? raw.warnings : [],
         hasAnyWarning:
             raw?.hasAnyWarning ??
             !!lines.find((l) => (l.warnings?.length || 0) > 0),
 
-        payment,                         // 👈 mới
+        payment,                         
     };
 }
 

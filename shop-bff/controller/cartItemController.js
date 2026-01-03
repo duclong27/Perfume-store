@@ -36,10 +36,10 @@ export async function updateCartItemController(req, res) {
       return res.status(400).json({ success: false, message: "Invalid qty" });
     }
 
-    // Proxy sang Core
+  
     const raw = await updateCartQuantityService(userId, { variantId, qty });
 
-    // Áp DTO y hệt addCartItemController
+    
     const dto = toCartDTO(raw?.data ?? raw);
     return res.status(200).json({ success: true, data: dto });
   } catch (err) {
@@ -49,7 +49,7 @@ export async function updateCartItemController(req, res) {
 
 export async function deleteCartItemController(req, res) {
   try {
-    const userId = Number(req.auth?.userId);        // từ JWT (authCustomerOnly)
+    const userId = Number(req.auth?.userId);        
     const cartItemId = Number(req.params?.cartItemId);
 
     if (!Number.isInteger(userId) || userId <= 0) {
@@ -59,10 +59,10 @@ export async function deleteCartItemController(req, res) {
       return res.status(400).json({ success: false, message: "Invalid cartItemId" });
     }
 
-    // Proxy sang Core
+    
     const raw = await deleteCartItemService(userId, cartItemId);
 
-    // Chuẩn hoá giống add/update: map về CartDTO để FE dùng thống nhất
+  
     const dto = toCartDTO(raw?.data ?? raw);
     return res.status(200).json({ success: true, data: dto });
   } catch (err) {

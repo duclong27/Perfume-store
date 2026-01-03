@@ -3,9 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Nền tím-xanh + các quầng sáng giống mockup */
+
 .bg-aurora {
-  /* 3 quầng sáng tím ở các góc + gradient nền chính */
+ 
   background:
     radial-gradient(1200px 800px at -10% 10%, rgba(139, 92, 246, 0.28) 0%, transparent 60%),
     radial-gradient(900px 600px at 110% 20%, rgba(167, 139, 250, 0.30) 0%, transparent 60%),
@@ -13,12 +13,12 @@
     linear-gradient(180deg, #1a1240 0%, #24145e 35%, #2e1a72 60%, #3b1f88 80%, #4c2aa8 100%);
 }
 
-/* Vignette (viền tối mềm) + lớp mờ nhẹ để “blend” như ảnh */
+
 .bg-aurora-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  /* viền tối + highlight mỏng bên trên để nền “mềm” hơn */
+
   background:
     radial-gradient(120% 120% at 50% 120%, rgba(0,0,0,0.45) 0%, transparent 60%) ,
     radial-gradient(80% 60% at -20% -10%, rgba(255,255,255,0.06) 0%, transparent 55%);

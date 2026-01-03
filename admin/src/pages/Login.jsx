@@ -43,7 +43,7 @@ export default function AdminLoginForm({ setToken }) {
                 throw new Error("Không nhận được token từ server");
             }
 
-            // ✅ Lưu token theo tùy chọn Remember
+          
             if (remember) {
                 localStorage.setItem("token", data.token);
                 sessionStorage.removeItem("token");
@@ -57,7 +57,7 @@ export default function AdminLoginForm({ setToken }) {
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 if (!err.response) {
-                    // network / CORS / server unreachable
+               
                     setError("Network error: không thể kết nối server. Kiểm tra API URL/CORS/backend.");
                     console.error("[AXIOS NETWORK ERROR]", err.message, err.code, err.toJSON?.());
                 } else {

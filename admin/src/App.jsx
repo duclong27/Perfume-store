@@ -25,7 +25,7 @@ import AddAccountPage from "./pages/AddAccount";
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 export const api = axios.create({
-  baseURL: backendUrl.replace(/\/+$/, ""), // bỏ dấu / cuối
+  baseURL: backendUrl.replace(/\/+$/, ""), 
   withCredentials: false,
 });
 
@@ -35,13 +35,13 @@ console.log("[API] baseURL =", api.defaults.baseURL);
 
 
 
-// Route guard: nhận token từ App (KHÔNG đọc localStorage)
+
 function ProtectedRoute({ token }) {
   if (!token) return <Navigate to="/login" replace />;
   return <Outlet />;
 }
 
-// Layout cho khu admin (có Sidebar)
+
 function AdminLayout({ onLogout }) {
   return (
     <div className="flex w-full">
@@ -67,7 +67,7 @@ export default function App() {
   return (
     <div className="relative flex min-h-screen overflow-hidden text-white">
       <ToastContainer position="top-right" autoClose={2500} theme="dark" />
-      {/* NỀN CHÍNH: giữ nguyên của bạn */}
+   
       <div className="absolute inset-0 -z-50 bg-gradient-to-br from-[#1a1240] via-[#2a1b6a] to-[#6a31d0]" />
       <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-[#8b5cf6] opacity-30 blur-3xl" />
       <div className="pointer-events-none absolute right-[-120px] top-24 h-[28rem] w-[28rem] rounded-full bg-[#a78bfa] opacity-25 blur-3xl" />
@@ -76,8 +76,7 @@ export default function App() {
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-violet-600 opacity-30 blur-[150px]" />
 
       <Routes>
-        {/* 
-            Nếu đã có token rồi mà vào /login thì đưa về dashboard */}
+        
         <Route
           path="/login"
           element={
@@ -87,7 +86,7 @@ export default function App() {
           }
         />
 
-        {/* Khu admin: cần token (ProtectedRoute) + layout có Sidebar */}
+        
         <Route element={<ProtectedRoute token={token} />}>
           <Route element={<AdminLayout onLogout={handleLogout} />}>
             <Route>

@@ -24,7 +24,7 @@ export async function adminOnly(req, res, next) {
             return res.status(403).json({ success: false, message: "FORBIDDEN" });
         }
 
-        // cho controller/service dùng nếu cần
+     
         req.admin = { adminId: admin.userId, roleNames, raw: payload };
         next();
     } catch (err) {

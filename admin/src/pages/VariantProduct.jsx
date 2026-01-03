@@ -49,7 +49,7 @@ export default function VariantProduct({
             sku: v?.sku ?? "",
             price: typeof v?.price === "number" ? v.price : Number(v?.price ?? 0),
             capacityMl: typeof v?.capacityMl === "number" ? v.capacityMl : Number(v?.capacityMl ?? 0),
-            // capacityMl: v?.capacityMl ?? v?.capacity ?? "",
+
             stock: typeof v?.stock === "number" ? v.stock : Number(v?.stock ?? 0),
             img: v?.img ?? v?.image ?? v?.thumbnail ?? null,
             name: v?.name ?? null,
@@ -99,12 +99,12 @@ export default function VariantProduct({
 
     return (
         <div className="rounded-3xl w-full min-h-screen border border-white/15 bg-white/5 backdrop-blur-lg p-8 text-white">
-            {/* Header row + Add */}
+
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl font-extrabold tracking-tight mb-6">Variant Details</h2>
 
                 <div className=" flex items-center gap-3">
-                    {/* (tuỳ chọn) ô search nhẹ */}
+
                     <div className="text-2xl hidden md:flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2">
                         <Search className="w-5 h-5 text-white/70" />
                         <input
@@ -149,7 +149,7 @@ export default function VariantProduct({
                                 key={v.id ?? idx}
                                 className="grid grid-cols-5 gap-3 px-6 py-4 items-center text-3xl hover:bg-white/5"
                             >
-                                {/* SKU (box hiển thị, giữ nguyên kích thước như input) */}
+
                                 <div
                                     className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-white truncate"
                                     title={v.sku || "-"}
@@ -157,7 +157,7 @@ export default function VariantProduct({
                                     {v.sku || "-"}
                                 </div>
 
-                                {/* Price box (không căn phải container) */}
+
                                 <div className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-white flex items-center gap-1">
                                     <span className="text-slate-300">$</span>
                                     <span>{fmtPrice(v.price)}</span>

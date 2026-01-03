@@ -11,7 +11,7 @@ export default function AddCategory({ onCreate, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Validate trước khi submit
+    
     if (!name.trim() && !description.trim()) {
       toast.error("Please enter category name and description ❌");
       return { ok: false };
@@ -35,17 +35,17 @@ export default function AddCategory({ onCreate, onCancel }) {
       const res = await api.post("/api/category/addCategory", payload);
       const created = res?.data?.data ?? res?.data;
 
-      // Reset form sau khi thành công
+     
       setName("");
       setDescription("");
 
-      // ✅ báo thành công
+      
       toast.success("Category created successfully 🎉");
 
       onCreate?.(created);
       return { ok: true, data: created, status: res.status };
     } catch (err) {
-      // ❌ báo lỗi API
+  
       const msg =
         err?.response?.data?.message ||
         err?.message ||

@@ -3,9 +3,18 @@ import { checkoutPlaceService } from "../../service/internal/checkoutPlaceServic
 import { passCoreError } from "../../utils/passCoreError.js";
 
 
+function getClientIp(req) {
+    return (
+        req.headers["x-forwarded-for"]?.split(",")[0] ||
+        req.socket?.remoteAddress ||
+        "127.0.0.1"
+    );
+}
+
+
 export const checkoutPlaceController = async (req, res) => {
     try {
-        // Lấy userId trực tiếp từ body/query (khi test Core, chưa có auth)
+
         const rawUserId = req.body?.userId ?? req.query?.userId;
         const userId = Number(rawUserId);
 
@@ -13,14 +22,14 @@ export const checkoutPlaceController = async (req, res) => {
             return res.status(400).json({ success: false, message: "Missing or invalid userId" });
         }
 
-        // Chuẩn hoá input giống preview
+
         const source = String(req.body?.source ?? "cart").toLowerCase();
         const items = Array.isArray(req.body?.items) ? req.body.items : undefined;
         const addressId = req.body?.addressId ?? null;
         const shippingSnapshot = req.body?.shippingSnapshot ?? null;
-        console.log(" shipping controller",shippingSnapshot)
+        console.log(" shipping controller", shippingSnapshot)
 
-        // Bắt buộc: phương thức thanh toán
+        const clientIp = getClientIp(req);
         const paymentMethodCodeRaw = req.body?.paymentMethodCode;
         const paymentMethodCode = typeof paymentMethodCodeRaw === "string" ? paymentMethodCodeRaw.toUpperCase() : "";
 
@@ -28,9 +37,7 @@ export const checkoutPlaceController = async (req, res) => {
             return res.status(400).json({ success: false, message: "Missing or invalid paymentMethodCode (COD | BANK_TRANSFER | VNPAY)" });
         }
 
-        // (Optional) Lấy IP thật của client để truyền xuống service build VNPay URL (nếu bạn muốn)
-        // Hiện tại checkoutPlaceService đang set "0.0.0.0", bạn có thể truyền vào nếu đã hỗ trợ:
-        // const clientIp = (req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "").split(",")[0].trim();
+
 
         const data = await checkoutPlaceService({
             userId,
@@ -39,7 +46,7 @@ export const checkoutPlaceController = async (req, res) => {
             shippingSnapshot,
             source,
             items,
-            // clientIp, // nếu bạn quyết định hỗ trợ IP ở service
+            clientIp
         });
 
         return res.status(200).json({ success: true, data });

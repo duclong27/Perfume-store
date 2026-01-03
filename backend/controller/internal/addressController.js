@@ -50,10 +50,7 @@ export const getAddressesByUserIdController = async (req, res) => {
     }
 };
 
-/**
- * PATCH /internal/v1/users/:userId/addresses/:addressId
- * Cập nhật text fields; KHÔNG cho sửa isDefault tại đây
- */
+
 export const updateAddressController = async (req, res) => {
     try {
         const userId = Number(req.params?.userId);

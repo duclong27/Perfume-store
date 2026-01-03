@@ -1,4 +1,4 @@
-// /admin-backend/src/services/checkout/previewCheckoutService.js
+
 import { Op } from "sequelize";
 import { AppError } from "../../utils/AppError.js";
 import Cart from "../../model/Cart.js";
@@ -22,13 +22,12 @@ function readCurrentPrice(variant) {
 
 
 
-/// sửa lại phần shipping fee
-// Miễn phí ship khi subtotal >= 300_000, ngược lại 30_000
+
 export function calcShippingFee({ subtotal }) {
     const n = Number(subtotal) || 0;
     return n >= 30000000 ? 0 : 30000;
 }
-/////hết phần sửa lại 
+
 
 
 const {
@@ -89,19 +88,19 @@ export async function previewCheckoutService({
     items = [],
     addressId = null,
     shippingSnapshot = null,
-    // [ADD] nhận method để render preview payment
+   
     paymentMethodCode = null,
 } = {}) {
     const uid = toNum(userId);
     if (!isPosInt(uid)) throw new AppError("Invalid userId", 400);
 
-    /* ================= 0) Resolve Address (read-only) ================= */
+    
     let resolvedAddressId = null;
     let addressSnapshot = null;
 
     const aid = toNum(addressId);
     if (isPosInt(aid)) {
-        // đọc DB để echo địa chỉ ra preview (KHÔNG ghi)
+        
         const addr = await Address.findOne({
             where: { addressId: aid, userId: uid },
             attributes: [
@@ -118,11 +117,11 @@ export async function previewCheckoutService({
         addressSnapshot = toAddressSnapshotFromBody(shippingSnapshot);
     }
     if (!addressSnapshot) {
-        // chưa chọn gì: echo rỗng để FE hiển thị
+        
         addressSnapshot = toAddressSnapshotFromBody({});
     }
 
-    /* ================= 1) Lấy danh sách {variantId, qtyRequested} ================= */
+   
     let requested = [];
 
     if (source === "cart") {
@@ -182,7 +181,7 @@ export async function previewCheckoutService({
         throw new AppError("Invalid source", 400);
     }
 
-    /* ================= 2) Fetch variants khi cần ================= */
+   
     const needFetchIds = requested.filter((r) => !r._variant).map((r) => r.variantId);
     let fetchedById = new Map();
     if (needFetchIds.length > 0) {
@@ -200,7 +199,7 @@ export async function previewCheckoutService({
         fetchedById = new Map(variants.map((v) => [Number(v.variantId), v]));
     }
 
-    /* ================= 3) Tính dòng ================= */
+    
     const lines = [];
     let subtotal = 0;
 
@@ -246,7 +245,7 @@ export async function previewCheckoutService({
             unitPrice: Number.isFinite(unitPrice) ? Number(unitPrice) : null,
             lineSubtotal,
             warnings,
-            // [MOD] meta gọn cho FE
+         
             name: product?.name ?? null,
             imageUrl: product?.imageUrl ?? variant?.imageUrl ?? null,
             variant: {
@@ -263,12 +262,11 @@ export async function previewCheckoutService({
         });
     }
 
-    /* ================= 4) Totals ================= */
+    
     const discountTotal = 0;
     const shippingFee = calcShippingFee({ subtotal });
     const grandTotal = subtotal + shippingFee - discountTotal;
 
-    /* ================= 5) Payment block (preview) ================= */
     const requestedMethod = String(paymentMethodCode || "").toUpperCase() || null;
     const paymentOptions = [
         { code: "COD", label: "Thanh toán khi nhận hàng" },
@@ -290,10 +288,9 @@ export async function previewCheckoutService({
         };
     }
 
-    /* ================= 6) Trả về ================= */
     return {
-        addressId: resolvedAddressId ?? null,        // <— KHÔNG dùng 0
-        addressSnapshot,                              // <— echo để FE nhìn thấy & dùng phone sample
+        addressId: resolvedAddressId ?? null,     
+        addressSnapshot,                             
         source,
         lines,
         totals: {
@@ -302,9 +299,9 @@ export async function previewCheckoutService({
             discountTotal,
             grandTotal,
         },
-        warnings: [],                                 // (tuỳ chọn) bạn có thể nối thêm cảnh báo address
+        warnings: [],                                 
         hasAnyWarning: lines.some((l) => (l.warnings?.length || 0) > 0),
-        payment,                                      // <— block payment cho preview
+        payment,                                   
     };
 }
 

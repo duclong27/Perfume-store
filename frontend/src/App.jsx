@@ -23,13 +23,12 @@ import PreviewOrderPage from './pages/PreviewOrder';
 import AddressPage from './pages/Address/AddressPage';
 import AddAddressPage from './pages/Address/AddAddressPage';
 import EditAddressPage from './pages/Address/EditAddressPage';
-import { Toaster } from 'react-hot-toast';
 import ReturnPage from './pages/ReturnPage'
 import SuccessPage from './pages/SuccessPage';
 import MyOrderPage from './pages/Orders';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const baseURL = (apiBaseUrl || "").replace(/\/+$/, ""); // bỏ mọi dấu "/" ở cuối
+const baseURL = (apiBaseUrl || "").replace(/\/+$/, ""); 
 
 export const api = axios.create({
   baseURL,
@@ -40,8 +39,6 @@ console.log("[API] baseURL =", api.defaults.baseURL);
 
 const App = () => {
   return (
-
-
 
     <>
 
@@ -58,7 +55,7 @@ const App = () => {
       </Routes>
 
 
-      {/* Phần nội dung chính cũng căn giữa bằng px-... */}
+      {/* Phần nội dung chính cũng căn giữa */}
       <div className="px-4 pt-25 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] ">
         <ToastContainer />
 

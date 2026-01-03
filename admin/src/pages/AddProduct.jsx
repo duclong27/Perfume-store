@@ -87,7 +87,7 @@ export default function AddProductPage() {
         categoryId: "",
         name: "",
         brand: "",
-        gender: "Men", // display label; will be mapped to backend enum
+        gender: "Men",
         description: "",
         imageFile: null,
         isEnable: true,
@@ -103,7 +103,7 @@ export default function AddProductPage() {
     const [categories, setCategories] = useState([]);
     const [loadingCats, setLoadingCats] = useState(true);
     const [catsError, setCatsError] = useState(null);
-    
+
 
 
     // refs & previews
@@ -119,7 +119,7 @@ export default function AddProductPage() {
         []
     );
 
-    // map display label -> backend enum value
+
     const mapGenderToEnum = (label) => {
         const found = genderOptions.find((g) => g.label === label || g.value === label);
         return found ? found.value : "Unisex";
@@ -132,7 +132,7 @@ export default function AddProductPage() {
 
 
 
-    // helpers (đặt ngoài component, dùng chung)
+
     const normalizeCategory = (c) => ({
         categoryId: c.categoryId ?? c.id ?? String(c?.value ?? ""),
         name: c.name ?? c.title ?? "",
@@ -245,26 +245,26 @@ export default function AddProductPage() {
             let headers = {};
 
             if (hasFile) {
-                // ===== MULTIPART (có ảnh) =====
+
                 const fd = new FormData();
                 fd.append("categoryId", String(cid));
                 fd.append("name", name);
                 if (brand) fd.append("brand", brand);
                 if (description) fd.append("description", description);
 
-                // ✅ GIỮ NGUYÊN CÁCH BẠN LÀM GENDER
+
                 fd.append("gender", mapGenderToEnum(form.gender));
 
-                // ✅ SAU KHI BE FIX: luôn gửi isEnable (string)
+
                 fd.append("isEnable", form.isEnable ? "true" : "false");
 
-                // ✅ đúng tên field upload
+
                 fd.append("file", form.imageFile);
 
                 payload = fd;
                 headers["Content-Type"] = "multipart/form-data";
             } else {
-                // ===== JSON (không ảnh) =====
+
                 payload = {
                     categoryId: cid,
                     name,
@@ -274,7 +274,7 @@ export default function AddProductPage() {
                 if (brand) payload.brand = brand;
                 if (description) payload.description = description;
 
-                // (tuỳ chọn) nếu có chọn ảnh sẵn /images
+
                 const url = normImagePath(form.imageUrl);
                 if (url) {
                     payload.imageUrl = url;

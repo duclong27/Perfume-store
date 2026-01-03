@@ -17,122 +17,125 @@ import { Op, Transaction } from "sequelize";
 /* ---------- Helpers ---------- */
 const ensureArray = (x) => (x == null ? [] : Array.isArray(x) ? x : [x]);
 const toNum = (x, fb = null) => {
-    const n = Number(x);
-    return Number.isFinite(n) ? n : fb;
+  const n = Number(x);
+  return Number.isFinite(n) ? n : fb;
 };
 const isPosInt = (x) => Number.isInteger(x) && x > 0;
 
 /** Giá hiện tại từ ProductVariant.price */
 function readCurrentPrice(variant) {
-    const n = Number(variant?.price);
-    return Number.isFinite(n) && n >= 0 ? n : NaN;
+  const n = Number(variant?.price);
+  return Number.isFinite(n) && n >= 0 ? n : NaN;
 }
 
 export function calcShippingFee({ subtotal }) {
-    const n = Number(subtotal) || 0;
-    return n >= 30000000 ? 0 : 30000;
+  const n = Number(subtotal) || 0;
+  return n >= 30000000 ? 0 : 30000;
 }
 
 // ENV
 const {
-    VNPAY_TMN_CODE,
-    VNPAY_HASH_SECRET,
-    VNPAY_ENDPOINT,
-    VNPAY_RETURN_URL,
-    PAYMENT_BT_IMAGE_URL,
-    PAYMENT_BT_NOTE_TEMPLATE,
+  VNPAY_TMN_CODE,
+  VNPAY_HASH_SECRET,
+  VNPAY_ENDPOINT,
+  VNPAY_RETURN_URL,
+  PAYMENT_BT_IMAGE_URL,
+  PAYMENT_BT_NOTE_TEMPLATE,
 } = process.env;
 
 /* ================= Helpers ================= */
 function pad2(n) { return String(n).padStart(2, "0"); }
 
 function formatVNPayDate(d = new Date()) {
-    const y = d.getFullYear();
-    const mo = pad2(d.getMonth() + 1);
-    const da = pad2(d.getDate());
-    const h = pad2(d.getHours());
-    const mi = pad2(d.getMinutes());
-    const s = pad2(d.getSeconds());
-    return `${y}${mo}${da}${h}${mi}${s}`;
+  const y = d.getFullYear();
+  const mo = pad2(d.getMonth() + 1);
+  const da = pad2(d.getDate());
+  const h = pad2(d.getHours());
+  const mi = pad2(d.getMinutes());
+  const s = pad2(d.getSeconds());
+  return `${y}${mo}${da}${h}${mi}${s}`;
 }
 
 function sortObject(obj) {
-    const sorted = {};
-    Object.keys(obj).sort().forEach((k) => (sorted[k] = obj[k]));
-    return sorted;
+  const sorted = {};
+  Object.keys(obj).sort().forEach((k) => (sorted[k] = obj[k]));
+  return sorted;
 }
 
 /* ==== new helpers for signed key ==== */
 function sortAndClean(obj) {
-    // sort theo alphabet + bỏ undefined/null/""
-    return Object.fromEntries(
-        Object.entries(obj)
-            .filter(([, v]) => v !== undefined && v !== null && v !== "")
-            .sort(([a], [b]) => a.localeCompare(b))
-    );
+  // sort theo alphabet + bỏ undefined/null/""
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([, v]) => v !== undefined && v !== null && v !== "")
+      .sort(([a], [b]) => a.localeCompare(b))
+  );
 }
 
 // encode theo application/x-www-form-urlencoded: space -> '+'
 function formEncode(s) {
-    return encodeURIComponent(String(s)).replace(/%20/g, "+");
+  return encodeURIComponent(String(s)).replace(/%20/g, "+");
 }
 
 
 function toFormQuery(sortedObj) {
-    return Object.keys(sortedObj)
-        .map((k) => `${formEncode(k)}=${formEncode(sortedObj[k])}`)
-        .join("&");
+  return Object.keys(sortedObj)
+    .map((k) => `${formEncode(k)}=${formEncode(sortedObj[k])}`)
+    .join("&");
 }
 
 function hmac512(secret, data) {
-    // VNPay so sánh UPPERCASE
-    return crypto.createHmac("sha512", secret).update(data, "utf8").digest("hex").toUpperCase();
+  // VNPay so sánh UPPERCASE
+  return crypto.createHmac("sha512", secret).update(data, "utf8").digest("hex").toUpperCase();
 }
 
 function buildSignedUrl(endpoint, params, secret) {
-    const sorted = sortAndClean(params);          // bỏ rỗng + sort
-    const signData = toFormQuery(sorted);         // space -> '+'
-    const secureHash = hmac512(secret, signData); // UPPERCASE
-    return `${endpoint}?${signData}&vnp_SecureHash=${secureHash}`;
+  const sorted = sortAndClean(params);          // bỏ rỗng + sort
+  const signData = toFormQuery(sorted); 
+  console.log(" signdata : " + signData);       
+  const secureHash = hmac512(secret, signData); // UPPERCASE
+  return `${endpoint}?${signData}&vnp_SecureHash=${secureHash}`;
+  
+
 }
 /// /* ==== end new helpers for signed key ==== */
 
 /** Sinh mã tham chiếu duy nhất, encode kèm orderId để đối chiếu */
 function makeTxnRef(orderId, now = new Date()) {
-    const stamp = formatVNPayDate(now); // yyyyMMddHHmmss
-    return `ORDER-${orderId}-${stamp}`;
+  const stamp = formatVNPayDate(now); // yyyyMMddHHmmss
+  return `ORDER-${orderId}-${stamp}`;
 }
 
 /** Lấy snapshot giao hàng: ưu tiên Address theo addressId, fallback shippingSnapshot */
 async function resolveShippingSnapshot({ addressId, shippingSnapshot, userId, t = null }) {
-    if (isPosInt(toNum(addressId))) {
-        const addr = await Address.findOne({ where: { addressId: toNum(addressId), userId: toNum(userId) }, transaction: t });
-        if (!addr) throw new AppError("Address not found", 400);
-        return {
-            recipientName: addr.recipientName || null,
-            phoneNumber: addr.phoneNumber || null,
-            addressLine: addr.addressLine || null,
-            city: addr.city || null,
-            state: addr.state || null,
-            postalCode: addr.postalCode || null,
-            country: addr.country || null,
-        };
-    }
-    // fallback: dùng shippingSnapshot từ body (trường hợp khách chưa lưu address)
-    if (shippingSnapshot && typeof shippingSnapshot === "object") {
-        return {
-            recipientName: shippingSnapshot.shippingName || null,
-            phoneNumber: shippingSnapshot.shippingPhone || null,
-            addressLine: shippingSnapshot.shippingAddress || null,
-            city: shippingSnapshot.shippingCity || null,
-            state: shippingSnapshot.shippingState || null,
-            postalCode: shippingSnapshot.postalCode ?? shippingSnapshot.shippingPostal ?? null,
-            country: shippingSnapshot.shippingCountry || null,
+  if (isPosInt(toNum(addressId))) {
+    const addr = await Address.findOne({ where: { addressId: toNum(addressId), userId: toNum(userId) }, transaction: t });
+    if (!addr) throw new AppError("Address not found", 400);
+    return {
+      recipientName: addr.recipientName || null,
+      phoneNumber: addr.phoneNumber || null,
+      addressLine: addr.addressLine || null,
+      city: addr.city || null,
+      state: addr.state || null,
+      postalCode: addr.postalCode || null,
+      country: addr.country || null,
+    };
+  }
+  // fallback: dùng shippingSnapshot từ body (trường hợp khách chưa lưu address)
+  if (shippingSnapshot && typeof shippingSnapshot === "object") {
+    return {
+      recipientName: shippingSnapshot.shippingName || null,
+      phoneNumber: shippingSnapshot.shippingPhone || null,
+      addressLine: shippingSnapshot.shippingAddress || null,
+      city: shippingSnapshot.shippingCity || null,
+      state: shippingSnapshot.shippingState || null,
+      postalCode: shippingSnapshot.postalCode ?? shippingSnapshot.shippingPostal ?? null,
+      country: shippingSnapshot.shippingCountry || null,
 
 
-        };
-    }
-    throw new AppError("Missing shipping info (addressId or shippingSnapshot)", 400);
+    };
+  }
+  throw new AppError("Missing shipping info (addressId or shippingSnapshot)", 400);
 }
 
 /* --------- BANK TRANSFER instructions --------- */
@@ -141,220 +144,32 @@ function sanitizePhone(p) { return p ? String(p).replace(/[^\d+]/g, "") : ""; }
 
 // [CHANGE] trả về note (rendered) + phone + giữ template để audit
 function buildBankTransferInstructions({ orderId, shippingPhone }) {
-    const tpl = PAYMENT_BT_NOTE_TEMPLATE || "{phone}-{orderId}";
-    const phone = sanitizePhone(shippingPhone);
-    const note = tpl
-        .replaceAll("{orderId}", String(orderId))
-        .replaceAll("{phone}", phone);
-    return {
-        imageUrl: PAYMENT_BT_IMAGE_URL || null,
-        note,                 // [CHANGE] giá trị hiển thị cho KH
-        phone,                // [CHANGE] cho KH dễ copy
-        // noteTemplate: tpl,    // (audit) template gốc
-        noteHint: "Vui lòng ghi đúng nội dung chuyển khoản như trên để đối soát nhanh.",
-    };
+  const tpl = PAYMENT_BT_NOTE_TEMPLATE || "{phone}-{orderId}";
+  const phone = sanitizePhone(shippingPhone);
+  const note = tpl
+    .replaceAll("{orderId}", String(orderId))
+    .replaceAll("{phone}", phone);
+  return {
+    imageUrl: PAYMENT_BT_IMAGE_URL || null,
+    note,                 // [CHANGE] giá trị hiển thị cho KH
+    phone,                // [CHANGE] cho KH dễ copy
+    // noteTemplate: tpl,    // (audit) template gốc
+    noteHint: "Vui lòng ghi đúng nội dung chuyển khoản như trên để đối soát nhanh.",
+  };
 }
 
+
+
+
 /* * ================= Service chính ================= */
-/**
- * Tạo đơn hàng theo phương thức thanh toán.
- * - COD: payment_status = 'unpaid'
- * - BANK_TRANSFER: payment_status = 'pending', trả paymentInstructions
- * - VNPAY: payment_status = 'pending', tạo payment_transactions + trả paymentUrl
- */
-// export async function checkoutPlaceService({
-//     userId,
-//     paymentMethodCode,
-//     addressId = null,
-//     shippingSnapshot = null,
-//     source = "cart",
-//     items = [],
-// } = {}) {
-//     const uid = toNum(userId);
-//     if (!isPosInt(uid)) throw new AppError("Invalid userId", 400);
-
-//     const method = String(paymentMethodCode || "").toUpperCase();
-//     if (!["COD", "BANK_TRANSFER", "VNPAY"].includes(method)) {
-//         throw new AppError("Unsupported payment method", 400);
-//     }
-
-//     // 1) Tính tiền qua preview
-//     const preview = await previewCheckoutService({
-//         userId: uid,
-//         source,
-//         items,
-//         addressId,
-//         shippingSnapshot,
-//     });
-
-//     // Chặn case không có dòng hợp lệ
-//     const hasAnyPriced = (preview?.lines || []).some(
-//         (l) => toNum(l.qtyPriced) > 0 && Number.isFinite(l.unitPrice)
-//     );
-//     if (!hasAnyPriced) throw new AppError("No valid items to place order", 400);
-
-//     // 2) Snapshot địa chỉ
-//     const shipSnap = await resolveShippingSnapshot({
-//         addressId,
-//         shippingSnapshot,
-//         userId: uid,
-//     });
-//      console.log("shipSnap : ", shipSnap)
-
-//     // 3) Tạo order + (tuỳ method) tạo payment transaction / build URL
-//     return await sequelize.transaction(async (t) => {
-//         // Note mặc định theo phương thức
-//         let initialNote = null;
-//         if (method === "COD") initialNote = "Thanh toán khi nhận hàng";
-//         if (method === "VNPAY") initialNote = "Thanh toán VNPay - chờ xác nhận";
-//         // (BANK_TRANSFER sẽ cập nhật note sau khi có orderId)
-
-//         // 3.1) Tạo ORDER
-//         const order = await Order.create(
-//             {
-//                 userId: uid,
-//                 addressId: isPosInt(toNum(addressId)) ? toNum(addressId) : null,
-//                 status: "pending",
-//                 totalAmount: toNum(preview?.totals?.grandTotal, 0), 
-
-//                 // snapshot địa chỉ
-//                 shippingName: shipSnap.recipientName,
-//                 shippingPhone: shipSnap.phoneNumber,
-//                 shippingAddress: shipSnap.addressLine,
-//                 shippingCity: shipSnap.city,
-//                 shippingState: shipSnap.state,
-//                 shippingPostal: shipSnap.postalCode,
-//                 shippingCountry: shipSnap.country,
-
-
-
-
-//                 // thanh toán
-//                 paymentMethodCode: method,
-//                 paymentStatus: method === "COD" ? "unpaid" : "pending",
-
-//                 // ghi note ngay khi tạo (COD/VNPAY có sẵn, BANK_TRANSFER cập nhật sau)
-//                 note: initialNote,
-
-//                 // [CHANGE] snapshot tạm thời: tránh null ở lúc mới tạo (optional)
-//                 paymentInstructionsSnapshot:
-//                     method === "BANK_TRANSFER"
-//                         ? buildBankTransferInstructions({
-//                             orderId: "PENDING",
-//                             shippingPhone: shipSnap.phoneNumber,
-//                         })
-//                         : null,
-//             },
-//             { transaction: t }
-//         );
-//         // console.log( shippingName)
-//         // console.log(shippingPhone)
-//         // console.log( shippingAddress)
-
-//         // 3.1b) Nếu BANK_TRANSFER: cập nhật snapshot & note sau khi đã có orderId
-//         let finalSnap = null; // [CHANGE] giữ lại để trả FE
-//         if (method === "BANK_TRANSFER") {
-//             finalSnap = buildBankTransferInstructions({
-//                 orderId: order.orderId,
-//                 shippingPhone: shipSnap.phoneNumber,
-//             });
-//             await order.update(
-//                 {
-//                     paymentInstructionsSnapshot: finalSnap,
-//                     note: `Chuyển khoản - ORDER-${order.orderId}`,
-//                 },
-//                 { transaction: t }
-//             );
-//         }
-
-//         // 3.2) (TODO) bulkCreate OrderItems từ preview.lines…
-
-//         // 3.3) Theo phương thức thanh toán → trả kết quả phù hợp
-//         if (method === "COD") {
-//             return {
-//                 orderId: order.orderId,
-//                 paymentMethodCode: method,
-//                 paymentStatus: order.paymentStatus, // unpaid
-//                 message: "Thanh toán khi nhận hàng",
-//             };
-//         }
-
-//         if (method === "BANK_TRANSFER") {
-//             // [CHANGE] dùng finalSnap vừa lưu DB để trả về FE (tránh lệch)
-//             return {
-//                 orderId: order.orderId,
-//                 paymentMethodCode: method,
-//                 paymentStatus: order.paymentStatus, // pending
-//                 paymentInstructions: finalSnap,
-//             };
-//         }
-
-//         // VNPAY
-//         if (method === "VNPAY") {
-//             // tạo payment_transactions
-//             const txnRef = makeTxnRef(order.orderId);
-//             await PaymentTransaction.create(
-//                 {
-//                     orderId: order.orderId,
-//                     provider: "vnpay",
-//                     txnRef,
-//                     amountVnd: toNum(order.totalAmount, 0),
-//                     status: "pending",
-//                 },
-//                 { transaction: t }
-//             );
-
-//             // build VNPay URL
-//             const vnpParams = {
-//                 vnp_Version: "2.1.0",
-//                 vnp_Command: "pay",
-//                 vnp_TmnCode: VNPAY_TMN_CODE,
-//                 vnp_Locale: "vn",
-//                 vnp_CurrCode: "VND",
-//                 vnp_TxnRef: txnRef,
-//                 vnp_OrderInfo: `Thanh toan don hang #${order.orderId}`,
-//                 vnp_OrderType: "other",
-//                 vnp_Amount: toNum(order.totalAmount, 0) * 100, // VND × 100
-//                 vnp_ReturnUrl: (VNPAY_RETURN_URL || "").replace(
-//                     ":orderId",
-//                     String(order.orderId)
-//                 ),
-//                 vnp_IpAddr: "0.0.0.0", // nếu muốn, truyền IP thật ở controller
-//                 vnp_CreateDate: formatVNPayDate(new Date()),
-//             };
-
-//             // Bảo vệ ENV
-//             if (!VNPAY_TMN_CODE || !VNPAY_HASH_SECRET || !VNPAY_ENDPOINT || !VNPAY_RETURN_URL) {
-//                 throw new AppError("VNPay env is not configured", 500);
-//             }
-
-//             const paymentUrl = buildSignedUrl(
-//                 VNPAY_ENDPOINT,
-//                 vnpParams,
-//                 VNPAY_HASH_SECRET
-//             );
-
-//             return {
-//                 orderId: order.orderId,
-//                 paymentMethodCode: method,
-//                 paymentStatus: order.paymentStatus, // pending
-//                 paymentUrl,
-//             };
-//         }
-
-//         throw new AppError("Unsupported payment method", 400);
-//     });
-// }
-
-
-
 export async function checkoutPlaceService({
   userId,
   paymentMethodCode,
   addressId = null,
   shippingSnapshot = null,
   source = "cart",          // "cart" | "buy_now"
-  items = [],               // cho buy_now: [{ variantId, qty }, ...] (nếu preview đã xử lý vẫn ok)
+  items = [],      
+  clientIp         // cho buy_now: [{ variantId, qty }, ...] (nếu preview đã xử lý vẫn ok)
 } = {}) {
   const uid = toNum(userId);
   if (!isPosInt(uid)) throw new AppError("Invalid userId", 400);
@@ -423,9 +238,9 @@ export async function checkoutPlaceService({
           paymentInstructionsSnapshot:
             method === "BANK_TRANSFER"
               ? buildBankTransferInstructions({
-                  orderId: "PENDING",
-                  shippingPhone: shipSnap.phoneNumber,
-                })
+                orderId: "PENDING",
+                shippingPhone: shipSnap.phoneNumber,
+              })
               : null,
         },
         { transaction: t }
@@ -555,12 +370,12 @@ export async function checkoutPlaceService({
         }
       }
 
-      // === 3.4) Tuỳ phương thức thanh toán: trả output ===
+
       if (method === "COD") {
         return {
           orderId: order.orderId,
           paymentMethodCode: method,
-          paymentStatus: order.paymentStatus, // "unpaid"
+          paymentStatus: order.paymentStatus,
           message: "Thanh toán khi nhận hàng",
         };
       }
@@ -569,10 +384,13 @@ export async function checkoutPlaceService({
         return {
           orderId: order.orderId,
           paymentMethodCode: method,
-          paymentStatus: order.paymentStatus, // "pending"
+          paymentStatus: order.paymentStatus,
           paymentInstructions: bankInstructions,
         };
       }
+
+
+
 
       // === VNPAY ===
       if (method === "VNPAY") {
@@ -590,7 +408,7 @@ export async function checkoutPlaceService({
           { transaction: t }
         );
 
-        // Check ENV
+
         if (!VNPAY_TMN_CODE || !VNPAY_HASH_SECRET || !VNPAY_ENDPOINT || !VNPAY_RETURN_URL) {
           throw new AppError("VNPay env is not configured", 500);
         }
@@ -606,11 +424,17 @@ export async function checkoutPlaceService({
           vnp_OrderType: "other",
           vnp_Amount: toNum(order.totalAmount, 0) * 100, // VND × 100
           vnp_ReturnUrl: (VNPAY_RETURN_URL || "").replace(":orderId", String(order.orderId)),
-          vnp_IpAddr: "0.0.0.0", // controller có thể truyền IP thật của client
+          vnp_IpAddr: clientIp, // controller có thể truyền IP thật của client
           vnp_CreateDate: formatVNPayDate(new Date()),
         };
 
         const paymentUrl = buildSignedUrl(VNPAY_ENDPOINT, vnpParams, VNPAY_HASH_SECRET);
+
+        // ================== LOG PAYMENT URL ==================
+        console.log("VNPAY PAYMENT URL:");
+        console.log(paymentUrl);
+        console.log("===== VNPAY DEBUG END =====");
+        // =====================================================
 
         return {
           orderId: order.orderId,

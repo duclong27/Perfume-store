@@ -8,14 +8,14 @@ export default function EditVariant() {
     const navigate = useNavigate();
     const { state } = useLocation();
 
-    // ----- Prefill nếu đi từ list -----
+    
     const prefill = state?.variantPrefill ?? null;
 
-    // ----- DS product cho dropdown -----
+    
     const [products, setProducts] = useState([]);
     const [loadingProducts, setLoadingProducts] = useState(true);
 
-    // ----- Form state -----
+ 
     const [variantId, setVariantId] = useState("");
     const [productId, setProductId] = useState("");
     const [sku, setSku] = useState("");
@@ -26,15 +26,15 @@ export default function EditVariant() {
     const [img, setImg] = useState("");
     const [productNameFromVariant, setProductNameFromVariant] = useState("");
 
-    // ----- UI state -----
+
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [err, setErr] = useState("");
 
-    // snapshot để so dirty
+  
     const initialRef = useRef(null);
 
-    // helper chuẩn hoá variant
+
     const normalizeVariant = (v) => {
         if (!v) return null;
         const vid = v?.variant_id ?? v?.variantId ?? v?._id ?? v?.id ?? "";
@@ -61,7 +61,7 @@ export default function EditVariant() {
         };
     };
 
-    // ----- load products cho dropdown -----
+
     useEffect(() => {
         let mounted = true;
         (async () => {
@@ -93,7 +93,7 @@ export default function EditVariant() {
     }, []);
 
 
-    // ----- load variant ban đầu (prefill hoặc API) -----
+    
     useEffect(() => {
         let ignore = false;
         const abort = new AbortController();
@@ -163,7 +163,7 @@ export default function EditVariant() {
         };
     }, [id, prefill]);
 
-    // ----- dirty check -----
+    
     const dirty = useMemo(() => {
         const init = initialRef.current;
         if (!init) return false;
@@ -178,7 +178,7 @@ export default function EditVariant() {
         );
     }, [productId, sku, price, capacity, stock, name, img]);
 
-    // ----- submit update -----
+   
     const onSubmit = useCallback(async (e) => {
         e.preventDefault();
         if (!variantId) return toast.error("Thiếu id variant.");
@@ -226,7 +226,7 @@ export default function EditVariant() {
 
     const onCancel = useCallback(() => navigate(-1), [navigate]);
 
-    // ---- helper: kiểm tra product hiện tại có nằm trong list dropdown chưa
+  
     const currentProductInList = useMemo(
         () => !!products.find((p) => String(p.product_id) === String(productId)),
         [products, productId]
@@ -251,10 +251,10 @@ export default function EditVariant() {
                                 onChange={(e) => setProductId(e.target.value)}
                                 className="w-full appearance-none rounded-xl border border-white/15 bg-white/10 px-4 py-3 outline-none focus:border-violet-400"
                             >
-                                {/* Nếu chưa có productId */}
+                        
                                 {!productId && <option value="" className="bg-slate-900">-- Select product --</option>}
 
-                                {/* Nếu product hiện tại chưa có trong list (VD: list bị phân trang/role hạn chế), render option tạm để vẫn chọn sẵn */}
+                               
                                 {productId && !currentProductInList && (
                                     <option value={productId} className="bg-slate-900">
                                         {productNameFromVariant

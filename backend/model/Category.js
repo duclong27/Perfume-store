@@ -25,9 +25,9 @@ Category.init(
   },
   {
     sequelize,
-    modelName: "Category",     // tên model trong code
-    tableName: "categories",   // tên bảng trong DB
-    timestamps: false,         // bảng không có created_at/updated_at
+    modelName: "Category",     
+    tableName: "categories",  
+    timestamps: false,         
   }
 );
 

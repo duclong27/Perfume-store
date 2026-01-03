@@ -1,15 +1,5 @@
 import { getOrderByUserIdService, cancelOrderService } from "../service/customer/orderService.js";
 
-// export async function getMyOrdersController(req, res, next) {
-//   try {
-//     const dto = await getOrderByUserIdService({
-//       userId: req.auth.userId,     // từ JWT (authCustomerOnly đã gắn)
-//       page: req.query.page,
-//       limit: req.query.limit,
-//     });
-//     res.json(dto);                 // ❌ không await ở đây
-//   } catch (err) { next(err); }
-// }
 
 
 export const getMyOrdersController = async (req, res) => {
@@ -19,20 +9,20 @@ export const getMyOrdersController = async (req, res) => {
             return res.status(401).json({ success: false, message: "Unauthorized (no userId)" });
         }
 
-        // query: page, limit
+       
         const page = Math.max(1, parseInt(req.query.page ?? "1", 10));
         const limit = Math.max(1, Math.min(200, parseInt(req.query.limit ?? "20", 10)));
 
-        // gọi lần 1
+
         let { rows, total, page: pageOut, limit: limitOut } =
             await getOrderByUserIdService({ userId: uid, page, limit, useDTO: true, fetchAll: false });
 
-        // Nếu Core không trả total đúng chuẩn (vd: bằng số rows trên trang), ta thăm dò lại
+    
         const looksIncomplete = !(Number.isFinite(total) && total > rows.length) && page > 1;
         if (looksIncomplete) {
             const tryFirst = await getOrderByUserIdService({ userId: uid, page: 1, limit: 1, useDTO: false, fetchAll: false });
             if (Number.isFinite(tryFirst?.total) && tryFirst.total >= rows.length) {
-                total = tryFirst.total; // nâng cấp total chuẩn
+                total = tryFirst.total; 
             }
         }
 

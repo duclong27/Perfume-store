@@ -1,7 +1,4 @@
 import { buildPreviewCheckoutDTO, buildPlaceCheckoutDTO } from "../dto/checkoutDto.js";
-
-import { coreInternal } from "../config/coreClient.js";
-
 import { previewCheckoutService, placeCheckoutService } from "../service/customer/checkoutService.js";
 import { toPreviewDTO, toPlaceDTO } from "../dto/checkoutDto.js";
 
@@ -16,10 +13,10 @@ export const previewCheckoutController = async (req, res) => {
         }
 
         const payload = buildPreviewCheckoutDTO({ body: req.body, userId: uid });
-        const coreResp = await previewCheckoutService(payload); // { success, data }
+        const coreResp = await previewCheckoutService(payload); 
 
-        const data = coreResp?.data ?? coreResp;   // raw từ Core
-        const dto = toPreviewDTO(data);            // ✅ chuẩn hoá cho FE (có imageUrl absolute)
+        const data = coreResp?.data ?? coreResp;   
+        const dto = toPreviewDTO(data);           
 
         return res.status(200).json({ success: true, data: dto });
     } catch (err) {
@@ -30,7 +27,7 @@ export const previewCheckoutController = async (req, res) => {
 };
 
 
-// BFF: controllers/checkout/placeCheckoutController.js
+
 
 export const placeCheckoutController = async (req, res) => {
     try {
@@ -41,12 +38,12 @@ export const placeCheckoutController = async (req, res) => {
 
         const payload = buildPlaceCheckoutDTO
             ? buildPlaceCheckoutDTO({ body: req.body, userId: uid })
-            : buildPreviewCheckoutDTO({ body: req.body, userId: uid }); // fallback
+            : buildPreviewCheckoutDTO({ body: req.body, userId: uid }); 
         console.log("bff playload", payload)
 
-        const coreResp = await placeCheckoutService(payload); // { success, data }
-        const data = coreResp?.data ?? coreResp;             // raw Core
-        const dto = toPlaceDTO(data);                        // ✅ chuẩn hoá cho FE
+        const coreResp = await placeCheckoutService(payload); 
+        const data = coreResp?.data ?? coreResp;             
+        const dto = toPlaceDTO(data);                        
 
         return res.status(200).json({ success: true, data: dto });
     } catch (err) {
