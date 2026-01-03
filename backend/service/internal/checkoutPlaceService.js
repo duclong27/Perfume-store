@@ -12,7 +12,7 @@ import Cart from "../../model/Cart.js";
 
 import OrderItem from "../../model/OrderItem.js";
 import ProductVariant from "../../model/ProductVariant.js";
-import { previewCheckoutService } from "./checkOutService.js";
+import { previewCheckoutService } from "./checkoutService.js";
 import { Op, Transaction } from "sequelize";
 /* ---------- Helpers ---------- */
 const ensureArray = (x) => (x == null ? [] : Array.isArray(x) ? x : [x]);
