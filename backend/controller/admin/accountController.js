@@ -1,4 +1,4 @@
-import { getAllAccountService, updateAccountService, addAccountService } from "../../service/admin/AccountService.js";
+import { getAllAccountService, updateAccountService, addAccountService } from "../../service/admin/accountService.js";
 
 
 export const getAllAccountController = async (req, res) => {
