@@ -98,7 +98,7 @@ export default function VariantProduct({
 
 
     return (
-        <div className="rounded-3xl w-full min-h-screen border border-white/15 bg-white/5 backdrop-blur-lg p-8 text-white">
+        <div className="rounded-3xl w-full min-h-screen border border-white/15 bg-white/5 backdrop-blur-lg p-8 text-white mt-6">
 
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl font-extrabold tracking-tight mb-6">Variant Details</h2>

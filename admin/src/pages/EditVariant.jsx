@@ -233,7 +233,7 @@ export default function EditVariant() {
     );
 
     return (
-        <div className="w-full min-h-screen rounded-3xl border border-white/15 bg-white/5 backdrop-blur-lg p-10 text-white">
+        <div className="w-full min-h-screen rounded-3xl border border-white/15 bg-white/5 backdrop-blur-lg p-10 text-white mt-6">
             <h1 className="text-4xl font-extrabold tracking-tight mb-8">Edit Variant</h1>
 
             {loading ? (

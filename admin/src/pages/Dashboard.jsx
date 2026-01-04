@@ -111,7 +111,7 @@ export default function Dashboard() {
   // ---------------- UI -------------------
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg space-y-6">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg space-y-6 mt-5">
         {/* Header */}
         <header className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>

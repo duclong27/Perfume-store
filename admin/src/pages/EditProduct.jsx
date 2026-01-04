@@ -436,7 +436,7 @@ export default function EditProduct({ prefill }) {
 
     // ===== UI =====
     return (
-        <div className="rounded-3xl min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
+        <div className="rounded-3xl min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
             <div className="mx-auto w-full h-full">
                 <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
                     <h1 className="text-2xl font-semibold text-white">Edit Product</h1>

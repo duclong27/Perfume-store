@@ -193,7 +193,7 @@ export async function getAllProductsService({ page = 1, limit = 1000, q, include
     },
   ];
 
-  // tuỳ chọn include variants để hiện đầy đủ field
+  
   if (includeVariants) {
     include.push({
       model: ProductVariant,
@@ -208,7 +208,7 @@ export async function getAllProductsService({ page = 1, limit = 1000, q, include
         "imageUrl",
         "createdAt",
       ],
-      // Tránh nổ số dòng & sai count khi 1-n: Sequelize sẽ query variants riêng
+      
       separate: true,
       order: [["capacityMl", "ASC"]],
     });

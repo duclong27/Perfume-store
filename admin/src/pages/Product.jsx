@@ -273,7 +273,7 @@ export default function Products({ }) {
 
 
   return (
-    <div className="flex gap-6 h-full min-h-screen">
+    <div className="flex gap-6 h-full min-h-screen mt-6">
       <div className="flex-1 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 w-1/3">

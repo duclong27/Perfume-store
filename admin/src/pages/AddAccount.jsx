@@ -133,7 +133,7 @@ export default function AddAccountPage() {
     }
 
     return (
-        <div className="rounded-3xl min-h-screen w-[90%] bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
+        <div className="rounded-3xl min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
                 <div className="flex items-center justify-between">
                     <h1 className="text-3xl font-semibold text-white">Admin · Add Account</h1>

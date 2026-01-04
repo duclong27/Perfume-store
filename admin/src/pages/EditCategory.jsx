@@ -108,7 +108,7 @@ export default function EditCategory() {
     }
 
     return (
-        <div className="w-full h-full rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl p-10 text-white shadow-2xl">
+        <div className="w-full h-full rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl p-10 text-white shadow-2xl mt-6">
             <h2 className="text-4xl font-extrabold tracking-tight mb-8">
                 Edit Category
             </h2>

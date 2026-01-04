@@ -334,7 +334,7 @@ export default function AdminAccountPage() {
             return;
         }
 
-        // optimistic UI (giữ nguyên như bạn đã có) ...
+      
         const oldRow = { ...u };
         setPending((p) => ({ ...p, [u.userId]: true }));
         setRowsAll((prev) =>
@@ -399,7 +399,7 @@ export default function AdminAccountPage() {
     }
 
     return (
-        <div className="rounded-3xl min-h-screen w-[90%] bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
+        <div className="rounded-3xl min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
                 {/* Header */}
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">

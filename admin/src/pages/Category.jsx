@@ -125,7 +125,7 @@ export default function Categories() {
   };
 
   return (
-    <div className="flex gap-6 h-full min-h-screen">
+    <div className="flex gap-6 h-full min-h-screen mt-7">
  
       <div className="flex-1 space-y-6">
        
@@ -257,12 +257,7 @@ export default function Categories() {
             </p>
           </div>
 
-          <div className="space-y-2 text-slate-300 text-sm">
-            <div className="flex justify-between">
-              <span>Products</span>
-              <span className="text-white">{selected.products}</span>
-            </div>
-          </div>
+          
 
           {/* Action buttons */}
           <div className="flex gap-2 pt-2">
