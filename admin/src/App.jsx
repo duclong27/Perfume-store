@@ -99,7 +99,7 @@ export default function App() {
             <Route>
               <Route path="/admin/addAccount" element={<AddAccountPage />} />
               <Route path="/admin/account" element={<AdminAccounts />} />
-              <Route path="/admin/order" element={<Order />} />
+              {/* <Route path="/admin/order" element={<Order />} /> */}
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/product" element={<Product />} />
               <Route path="/admin/category" element={<Category />} />
