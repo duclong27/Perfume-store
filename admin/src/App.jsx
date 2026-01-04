@@ -27,7 +27,7 @@ export const backendUrl =
 
 // export const backendUrl =
 //   import.meta.env.VITE_BACKEND_URL;
-
+//duclong fix
 
 export const api = axios.create({
   baseURL: backendUrl.replace(/\/+$/, ""),
