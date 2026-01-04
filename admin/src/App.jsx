@@ -23,7 +23,7 @@ import AddAccountPage from "./pages/AddAccount";
 
 
 export const backendUrl =
-  import.meta.env.VITE_API_BASE_URL ;
+  import.meta.env.VITE_API_BASE_URL || VITE_BACKEND_URL ;
 
 // export const backendUrl =
 //   import.meta.env.VITE_BACKEND_URL;
