@@ -23,7 +23,7 @@ import AddAccountPage from "./pages/AddAccount";
 
 
 export const backendUrl =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
+  import.meta.env.VITE_API_BASE_URL || VITE_API_LOCAL_URL;
 
 // export const backendUrl =
 //   import.meta.env.VITE_BACKEND_URL;
