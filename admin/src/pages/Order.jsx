@@ -375,21 +375,7 @@ export default function AdminOrdersAll() {
         }
     }
 
-    // // ======= UI =======
-    // if (loading) {
-    //     return (
-    //         <div className="rounded-3xl min-h-screen w-[min(90vw,1280px)] mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)]">
-    //             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
-    //                 <div className="text-[clamp(20px,2.4vw,28px)] font-semibold">Admin · Orders</div>
-    //                 <div className="mt-6 grid gap-4">
-    //                     {Array.from({ length: 8 }).map((_, i) => (
-    //                         <div key={i} className="h-20 rounded-2xl bg-white/10 animate-pulse" />
-    //                     ))}
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
+
 
 
     // =================== ✅ CHANGE 1: LOADING UI ===================
