@@ -111,6 +111,7 @@
 //     </aside>
 //   );
 // }
+////fix bug
 
 
 // /src/components/Sidebar.jsx
@@ -157,7 +158,7 @@ export default function Sidebar() {
         overflow-hidden
       "
     >
-      
+
       <div className="flex items-center gap-3 px-6 py-6 shrink-0">
         <Link to="/" className="flex items-center gap-2 text-xl font-bold text-white">
           <Shield className="h-8 w-8 text-fuchsia-400" />
@@ -167,7 +168,7 @@ export default function Sidebar() {
 
       <div className="mx-4 h-px bg-white/10 shrink-0" />
 
-      
+
       <nav
         className="
           flex-1

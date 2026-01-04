@@ -17,15 +17,16 @@ import EditVariant from "./pages/EditVariant";
 import AddProductForm from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct"
 import Order from "./pages/Order"
-import AdminAccounts from "./pages/Account"; 
-import AddAccountPage from "./pages/AddAccount"; 
+import AdminAccounts from "./pages/Account";
+import AddAccountPage from "./pages/AddAccount";
 
 
 
-export const backendUrl = import.meta.env.VITE_BACKEND_URL
+export const backendUrl =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
 export const api = axios.create({
-  baseURL: backendUrl.replace(/\/+$/, ""), 
+  baseURL: backendUrl.replace(/\/+$/, ""),
   withCredentials: false,
 });
 
@@ -67,7 +68,7 @@ export default function App() {
   return (
     <div className="relative flex min-h-screen overflow-hidden text-white">
       <ToastContainer position="top-right" autoClose={2500} theme="dark" />
-   
+
       <div className="absolute inset-0 -z-50 bg-gradient-to-br from-[#1a1240] via-[#2a1b6a] to-[#6a31d0]" />
       <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-[#8b5cf6] opacity-30 blur-3xl" />
       <div className="pointer-events-none absolute right-[-120px] top-24 h-[28rem] w-[28rem] rounded-full bg-[#a78bfa] opacity-25 blur-3xl" />
@@ -76,7 +77,7 @@ export default function App() {
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-violet-600 opacity-30 blur-[150px]" />
 
       <Routes>
-        
+
         <Route
           path="/login"
           element={
@@ -86,13 +87,13 @@ export default function App() {
           }
         />
 
-        
+
         <Route element={<ProtectedRoute token={token} />}>
           <Route element={<AdminLayout onLogout={handleLogout} />}>
             <Route>
-<Route path="/admin/addAccount" element={<AddAccountPage />} />
+              <Route path="/admin/addAccount" element={<AddAccountPage />} />
               <Route path="/admin/account" element={<AdminAccounts />} />
-               <Route path="/admin/order" element={<Order />} />
+              <Route path="/admin/order" element={<Order />} />
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/product" element={<Product />} />
               <Route path="/admin/category" element={<Category />} />
