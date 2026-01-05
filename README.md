@@ -1,26 +1,10 @@
 # Perfume Store – Full-Stack E-Commerce System
 
-A full-stack e-commerce platform designed to support complete **user shopping workflows**
-and **admin management operations**, including product management, order lifecycle
-control, and integrated online payments.
+🧩 System Architecture Overview
 
-The system is built with a scalable architecture separating **user-facing applications**
-and **admin management systems**, ensuring security, maintainability, and performance.
+This project follows a BFF (Backend-for-Frontend) + Core API architecture, designed to clearly separate user-facing concerns from core business logic while ensuring scalability, security, and maintainability.
 
----
-
-## Project Overview
-
-This project implements a **secure and scalable e-commerce solution** that covers the
-entire business flow:
-
-- Product browsing → Cart → Checkout → Payment
-- Order creation → Admin approval/cancellation → Order completion
-- Role-based access control for users and administrators
-- Integrated online payment gateway and COD support
-
-The architecture separates concerns across multiple frontend and backend services to
-support future expansion and independent deployment.
+The system consists of two frontends and two backends, where the Admin Backend acts as the single source of truth and is the only service allowed to access the database and external integrations.
 
 ---
 
@@ -89,42 +73,49 @@ support future expansion and independent deployment.
 - Role-based access to admin resources
 
 ---
+## Images
 
-## Database Design
+🧩 System Architecture Overview 
 
-- Designed and optimized a relational MySQL schema including:
-  - Users
-  - Roles
-  - Products
-  - Categories
-  - Orders
-  - Order Items
-  - Payments
-- Enforced data consistency with relationships, constraints, and validations
-- Optimized queries to support admin dashboards and order statistics
+<img width="1336" height="524" alt="diagram achitec" src="https://github.com/user-attachments/assets/b3ec9bd8-a295-4afa-b6fa-c6cda7373742" />
 
----
+🧩 Database design
 
-## Security & Code Quality
+<img width="1044" height="673" alt="image" src="https://github.com/user-attachments/assets/072c6ac4-b471-4952-824a-0ff52b5305f6" />
 
-- JWT-based authentication
-- Role-based authorization for protected routes
-- Centralized error handling
-- Validation at API and database levels
-- Focus on maintainable, modular backend structure
-- Prepared architecture for future unit testing and scalability
+🧩 Admin Login
+<img width="1883" height="945" alt="image" src="https://github.com/user-attachments/assets/573fa519-56af-4a9a-8d95-b52e240450ff" />
 
----
+🧩 Admin Dashboard
 
-## Brief Summary
+<img width="1896" height="952" alt="image" src="https://github.com/user-attachments/assets/29bc3ff6-810b-47bb-a8a8-3c6b004a3b58" />
 
-Built a **secure, scalable full-stack e-commerce system** supporting complete user and
-admin workflows. The project focuses on **performance**, **data consistency**, and a
-**seamless user experience**, from product browsing to order approval and payment
-processing.
 
-This project demonstrates **end-to-end order lifecycle management**, integrated online
-payment handling, and real-world admin approval processes.
+🧩 Admin Account
+
+<img width="1889" height="945" alt="image" src="https://github.com/user-attachments/assets/b17299d9-9746-45d6-a658-ebb487ceb0fb" />
+
+🧩 User Login
+
+<img width="1876" height="858" alt="image" src="https://github.com/user-attachments/assets/479891a0-f03d-4f57-a844-18c8ac023e54" />
+
+🧩 User Homepage
+
+<img width="1874" height="846" alt="image" src="https://github.com/user-attachments/assets/4308c2df-78c9-4ac5-8287-3225bb42824b" />
+
+🧩 User Collection
+
+<img width="1881" height="837" alt="image" src="https://github.com/user-attachments/assets/9e8b4028-eea2-4e18-b74f-49e81f95d2f7" />
+
+🧩 User product
+
+<img width="1878" height="854" alt="image" src="https://github.com/user-attachments/assets/44d451c3-9af7-49a9-8daa-da2099b02995" />
+
+
+ 
+
+
+
 
 ---
 
