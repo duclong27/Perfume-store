@@ -77,7 +77,7 @@ The system consists of two frontends and two backends, where the Admin Backend a
 
 🧩 System Architecture Overview 
 
-<img width="836" height="524" alt="diagram achitec" src="https://github.com/user-attachments/assets/b3ec9bd8-a295-4afa-b6fa-c6cda7373742" />
+<img width="1336" height="524" alt="diagram achitec" src="https://github.com/user-attachments/assets/b3ec9bd8-a295-4afa-b6fa-c6cda7373742" />
 
 🧩 Database design
 
