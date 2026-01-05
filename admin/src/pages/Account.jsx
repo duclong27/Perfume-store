@@ -385,9 +385,9 @@ export default function AdminAccountPage() {
     /* -------------------------------- UI -------------------------------- */
     if (loading) {
         return (
-            <div className="rounded-3xl min-h-screen w-[90%] bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
-                    <div className="text-3xl font-semibold">Admin · Accounts</div>
+            <div className="rounded-3xl min-h-screen w-400 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
+                <div className="rounded-3xl border w-400 border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white ">
+                    <div className="text-3xl font-semibold"> Accounts</div>
                     <div className="mt-6 grid gap-4">
                         {Array.from({ length: 8 }).map((_, i) => (
                             <div key={i} className="h-20 rounded-2xl bg-white/10 animate-pulse" />
@@ -399,7 +399,7 @@ export default function AdminAccountPage() {
     }
 
     return (
-        <div className="rounded-3xl min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
+        <div className="rounded-3xl min-h-screen w-350 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
                 {/* Header */}
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">

@@ -310,7 +310,7 @@ export default function Products({ }) {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold mb-4">Products</h2>
+          <h2 className="text-4xl font-semibold mb-4">Products</h2>
           <table className="w-full text-3xl">
             <thead className="text-slate-300 text-left text-2xl">
               <tr>
