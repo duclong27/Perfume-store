@@ -84,10 +84,6 @@ The system consists of two frontends and two backends, where the Admin Backend a
 <img width="1044" height="673" alt="image" src="https://github.com/user-attachments/assets/072c6ac4-b471-4952-824a-0ff52b5305f6" />
 
 🧩 Admin Login
-
-<img width="1868" height="924" alt="image" src="https://github.com/user-attachments/assets/fa9eaf61-73ab-48e0-a6a9-da6f7f512622" />
-
-🧩 Admin Login
 <img width="1883" height="945" alt="image" src="https://github.com/user-attachments/assets/573fa519-56af-4a9a-8d95-b52e240450ff" />
 
 🧩 Admin Dashboard
