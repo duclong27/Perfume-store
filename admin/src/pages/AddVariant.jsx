@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from '../App'             
+import { api } from '../App'
 import { toast } from "react-toastify";
 
 export default function AddVariant() {
@@ -20,7 +20,7 @@ export default function AddVariant() {
         (async () => {
             try {
                 setLoadingProducts(true);
-                
+
                 const res = await api.get("/api/product/getAllProduct");
                 const raw = res?.data?.data ?? res?.data ?? [];
 
@@ -29,11 +29,11 @@ export default function AddVariant() {
                 console.log("the list:", JSON.stringify(list, null, 2));
 
 
-     
+
                 const normalized = list
                     .map((p) => {
                         const pid = p?.product_id ?? p?.productId ?? p?._id ?? null;
-                        if (!pid) return null; 
+                        if (!pid) return null;
                         return {
                             product_id: String(pid),
                             name: p?.name ?? p?.title ?? "Unnamed",
@@ -73,7 +73,7 @@ export default function AddVariant() {
         setSubmitting(true);
         try {
             const payload = {
-                productId: Number(productId),  
+                productId: Number(productId),
                 sku: sku.trim(),
                 price: Number(price),
                 capacityMl: Number(capacityMl),
@@ -83,18 +83,18 @@ export default function AddVariant() {
             console.log("Submitting payload:", payload);
 
 
-           
+
             const res = await api.post("/api/productVariant/addVariantProduct", payload);
             const created = res?.data?.data ?? payload;
 
             toast.success("Variant created successfully 🎉");
 
-   
+
             setSku("");
             setPrice("");
             setCapacityMl("");
             setStock("");
-     
+
         } catch (err) {
             const msg =
                 err?.response?.data?.message ||
@@ -127,8 +127,8 @@ export default function AddVariant() {
                         >
                             {products.map((p) => (
                                 <option
-                                    key={`prod-${p.product_id}`}      
-                                    value={p.product_id}              
+                                    key={`prod-${p.product_id}`}
+                                    value={p.product_id}
                                     className="bg-slate-900"
                                 >
                                     {p.name}

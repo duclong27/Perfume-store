@@ -404,7 +404,7 @@ export default function AdminAccountPage() {
                 {/* Header */}
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                     <div>
-                        <h1 className="text-3xl font-semibold text-white">Admin · Accounts</h1>
+                        <h1 className="text-3xl font-semibold text-white"> Accounts</h1>
                         <p className="text-white/70 text-xl">{rowsAll.length.toLocaleString("vi-VN")} users loaded</p>
                     </div>
 

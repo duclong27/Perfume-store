@@ -383,7 +383,7 @@ export default function AdminOrdersAll() {
         return (
             // ✅ CHANGE: tách nền full width
             <div className="min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900">
-                
+
                 {/* ✅ CHANGE: container fluid + max-width + padding responsive */}
                 <div className="mx-auto w-full max-w-[1440px] px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)]">
                     <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
@@ -401,8 +401,8 @@ export default function AdminOrdersAll() {
 
 
     return (
-        // <div className="rounded-3xl min-h-screen w-full mt-6 mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)]">
-             <div className="rounded-3xl min-h-screen w-320 mt-6 mx-auto bg-gradient-to-br ">
+        <div className="rounded-3xl min-h-screen w-full mt-6 mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)]">
+
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                     <div>

@@ -200,7 +200,7 @@ export default function XNavbar({ assets: assetsProp }) {
                   {userInitial}
                 </div>
                 <div className="text-left hidden sm:block">
-                  <div className="text-xs opacity-80">Xin chào,</div>
+                  <div className="text-xs opacity-80">Hello</div>
                   <div className="text-sm font-semibold truncate max-w-[10rem]">
                     {user?.name || user?.email || "Customer"}
                   </div>
@@ -216,9 +216,9 @@ export default function XNavbar({ assets: assetsProp }) {
                   role="menu"
                   className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur border border-black/10 shadow-xl rounded-xl overflow-hidden z-[60]"
                 >
-                  <Link to="/AddressPage" className="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100">Tài khoản</Link>
-                  <Link to="/myOrder" className="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100">Đơn hàng</Link>
-                  <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50">Đăng xuất</button>
+                  <Link to="/AddressPage" className="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100">Account</Link>
+                  <Link to="/myOrder" className="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100">Reservation</Link>
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50">Log out</button>
                 </div>
               )}
             </div>
@@ -228,13 +228,13 @@ export default function XNavbar({ assets: assetsProp }) {
                 onClick={goLogin}
                 className="h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 shadow"
               >
-                Đăng nhập
+                Login 
               </button>
               <button
                 onClick={goRegister}
                 className="h-10 px-4 rounded-xl bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 text-black font-semibold shadow hover:brightness-95"
               >
-                Đăng ký
+                Register
               </button>
             </div>
           )}

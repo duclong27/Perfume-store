@@ -96,7 +96,7 @@ export async function getOrderByUserIdService({
         offset: (curPage - 1) * pageSize,
     });
 
-    // Lần 1
+    
     const r1 = await coreInternal.get(`/order/getOrderByUserId/${uid}`, {
         params: sendParams(1, PAGE_SIZE),
     });
