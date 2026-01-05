@@ -20,7 +20,7 @@ export default function AdminLoginForm({ setToken }) {
     async function onSubmit(e) {
         console.log("[API] baseURL =", api.defaults.baseURL);
         e.preventDefault();
-        console.log("[LOGIN] full URL =", api.defaults.baseURL + "/api/user/loginAdminOrStaff");
+        console.log("[LOGIN] full URL =", api.defaults.baseURL + "/api/user/demoAdminLogin");
         if (loading) return;
         setError("");
         setLoading(true);
@@ -28,7 +28,7 @@ export default function AdminLoginForm({ setToken }) {
         try {
             console.groupCollapsed("%c[LOGIN] start", "color:#a78bfa");
             console.log("API_BASE:", api.defaults.baseURL);
-            console.log("endpoint:", "/api/user/loginAdminOrStaff");
+            console.log("endpoint:", "/api/user/demoAdminLogin");
             console.groupEnd();
 
             const payload = {
@@ -37,7 +37,7 @@ export default function AdminLoginForm({ setToken }) {
                 remember,
             };
 
-            const { data } = await api.post("/api/user/loginAdminOrStaff", payload);
+            const { data } = await api.post("/api/user/demoAdminLogin", payload);
 
             if (!data?.token) {
                 throw new Error("Không nhận được token từ server");

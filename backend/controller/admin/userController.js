@@ -58,6 +58,10 @@ const loginAdminOrStaffController = async (req, res, next) => {
 };
 
 
+
+
+
+
 const getUserByIdController = async (req, res) => {
     try {
         const userId = Number(req.params.id);
@@ -81,6 +85,33 @@ const getUserByIdController = async (req, res) => {
         });
     }
 };
+
+
+export const demoAdminLoginController = async (req, res) => {
+    try {
+        if (process.env.DEMO_MODE !== "true") {
+            return res.status(404).json({ success: false, message: "Not found" });
+        }
+
+        const email = process.env.DEMO_ADMIN_EMAIL || "";
+        const password = process.env.DEMO_ADMIN_PASSWORD || "";
+
+        if (!email || !password) {
+            return res.status(500).json({ success: false, message: "Demo env missing" });
+        }
+
+        const { token, user } = await loginAdminOrStaffService({ email, password });
+        return res.status(200).json({ success: true, token, user });
+    } catch (err) {
+        const status = err.status || 500;
+        let message = "Server error during demo login";
+        if (status === 401) message = "Demo account invalid";
+        if (status === 403) message = err.message || "Forbidden";
+        console.error("Demo admin login error:", err);
+        return res.status(status).json({ success: false, message });
+    }
+};
+
 
 
 export { registerUserController, loginUserController, loginAdminOrStaffController, getUserByIdController }

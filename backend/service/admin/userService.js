@@ -45,7 +45,7 @@ export async function registerUserService({ name, email, password }) {
 
 
 export async function loginUserService({ email, password }) {
-    // validate basic
+    
     const normEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
     if (!validator.isEmail(normEmail)) {
         throw new AppError("Incorrect email format", 400);
@@ -118,6 +118,8 @@ export async function loginAdminOrStaffService({ email, password }) {
         user: { id: user.userId, email: user.email, roles }
     };
 }
+
+
 
 export async function getUserByIdService({ userId } = {}) {
     const id = Number(userId);

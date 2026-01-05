@@ -35,10 +35,7 @@ app.use(express.json());
 
 // 🚀 MỞ TOANG CORS CHO DEV
 app.use(cors()); 
-// hoặc rõ ràng hơn:
-// app.use(cors({ origin: "*", methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"], allowedHeaders: ["Content-Type","Authorization"] }));
 
-// routes
 app.get("/", (req, res) => res.send("API Working"));
 // app.use("/api/internal/products" , productInternalRouter);
 
