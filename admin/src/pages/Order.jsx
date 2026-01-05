@@ -428,7 +428,7 @@ export default function AdminOrdersAll() {
 
 
         <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900">
-            {/* ✅ FIX: container trung tâm + max width + padding */}
+          
             <div className="mx-auto w-full max-w-[1440px] px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)]">
                 {/* ✅ FIX: card nội dung có rounded + blur */}
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
