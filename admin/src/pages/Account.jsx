@@ -606,12 +606,7 @@ export default function AdminAccountPage() {
                     </div>
                 </div>
 
-                <div className="mt-6 text-xl text-white/60">
-                    <p>
-                        Chỉnh <b>role</b> bằng dropdown (overwrite toàn bộ), bật/tắt <b>isEnable</b> bằng toggle, bấm{" "}
-                        <b>Save</b> ở mỗi dòng để cập nhật nhanh.
-                    </p>
-                </div>
+                
             </div>
         </div>
     );

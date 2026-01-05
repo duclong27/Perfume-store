@@ -403,7 +403,7 @@ export default function AdminOrdersAll() {
     if (loading) {
         return (
             // ✅ FIX: chặn overflow ngang + full width chuẩn (không dùng w-screen)
-            <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900">
+            <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 mt-6 rounded-3xl">
                 {/* ✅ FIX: container trung tâm + max width + padding */}
                 <div className="mx-auto w-full max-w-[1440px] px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)]">
                     <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
@@ -427,7 +427,7 @@ export default function AdminOrdersAll() {
 
 
 
-        <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900">
+        <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 mt-6 rounded-3xl">
           
             <div className="mx-auto w-full max-w-[1440px] px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)]">
                 {/* ✅ FIX: card nội dung có rounded + blur */}
