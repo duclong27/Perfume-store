@@ -34,7 +34,8 @@ Images
 
 🧩 Admin Account
 
-<img width="1889" height="945" alt="image" src="https://github.com/user-attachments/assets/b17299d9-9746-45d6-a658-ebb487ceb0fb" />
+<img width="1882" height="861" alt="image" src="https://github.com/user-attachments/assets/e5906e6d-b160-4dc8-8edb-ee6c62cc33b8" />
+
 
 
 
