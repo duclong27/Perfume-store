@@ -385,8 +385,12 @@ export default function AdminAccountPage() {
     /* -------------------------------- UI -------------------------------- */
     if (loading) {
         return (
-            <div className="rounded-3xl min-h-screen w-400 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
-                <div className="rounded-3xl border w-400 border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white ">
+            // <div className="rounded-3xl min-h-screen w-400 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6">
+            //     <div className="rounded-3xl border w-400 border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white ">
+
+            <div className="min-h-screen  overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 w-430 ">
+                
+                <div className="mx-auto    px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)] w-430">
                     <div className="text-3xl font-semibold"> Accounts</div>
                     <div className="mt-6 grid gap-4">
                         {Array.from({ length: 8 }).map((_, i) => (
@@ -399,8 +403,12 @@ export default function AdminAccountPage() {
     }
 
     return (
-        <div className="rounded-3xl min-h-screen w-350 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
+        // <div className="rounded-3xl min-h-screen w-350 bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-6 mt-6">
+        //     <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
+
+         <div className="rounded-3xl min-h-screen  mt-6 mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)] w-360">
+
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur ">
                 {/* Header */}
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                     <div>
