@@ -186,53 +186,92 @@ export default function AdminOrdersAll() {
     }, [q, orderStatus, paymentStatus, paymentMethod, sortBy, sortDir, setSearchParams]);
 
 
+    // useEffect(() => {
+    //     let cancelled = false;
+    //     (async () => {
+    //         try {
+    //             setLoading(true);
+    //             setErr("");
+
+    //             const PAGE_SIZE = 20;
+    //             let page = 1;
+    //             let all = [];
+    //             let total = Infinity;
+
+    //             while (!cancelled && all.length < total) {
+    //                 const { data } = await api.get("/api/order/getAllOrders", {
+    //                     params: { page, limit: PAGE_SIZE, sortBy: "createdAt", sortDir: "desc" },
+    //                 });
+
+    //                 const payload = data?.data ?? data ?? {};
+    //                 const rowsRaw = Array.isArray(payload?.rows)
+    //                     ? payload.rows
+    //                     : Array.isArray(payload)
+    //                         ? payload
+    //                         : [];
+    //                 const mapped = rowsRaw.map(normalizeOrder);
+
+    //                 all = all.concat(mapped);
+
+    //                 if (Number.isFinite(+payload?.total)) {
+    //                     total = +payload.total;
+    //                 } else {
+    //                     if (mapped.length === 0) break;
+    //                     if (page > 500) break;
+    //                 }
+
+    //                 page += 1;
+    //                 if (all.length >= total) break;
+    //             }
+
+    //             if (!cancelled) setOrders(all);
+    //         } catch (e) {
+    //             if (!cancelled) setErr(e?.response?.data?.message || e.message || "Không tải được danh sách đơn.");
+    //         } finally {
+    //             if (!cancelled) setLoading(false);
+    //         }
+    //     })();
+    //     return () => { cancelled = true; };
+    // }, []);
+
+
+
     useEffect(() => {
         let cancelled = false;
+
         (async () => {
             try {
                 setLoading(true);
                 setErr("");
 
-                const PAGE_SIZE = 20;
-                let page = 50;
-                let all = [];
-                let total = Infinity;
+                const { data } = await api.get("/api/order/getAllOrders", {
+                    params: { page: 1, limit: 100, sortBy: "createdAt", sortDir: "desc" },
+                });
 
-                while (!cancelled && all.length < total) {
-                    const { data } = await api.get("/api/order/getAllOrders", {
-                        params: { page, limit: PAGE_SIZE, sortBy: "createdAt", sortDir: "desc" },
-                    });
+                const payload = data?.data ?? data ?? {};
 
-                    const payload = data?.data ?? data ?? {};
-                    const rowsRaw = Array.isArray(payload?.rows)
-                        ? payload.rows
-                        : Array.isArray(payload)
-                            ? payload
-                            : [];
-                    const mapped = rowsRaw.map(normalizeOrder);
+                const rowsRaw = Array.isArray(payload?.rows)
+                    ? payload.rows
+                    : Array.isArray(payload)
+                        ? payload
+                        : [];
 
-                    all = all.concat(mapped);
+                const mapped = rowsRaw.map(normalizeOrder);
 
-                    if (Number.isFinite(+payload?.total)) {
-                        total = +payload.total;
-                    } else {
-                        if (mapped.length === 0) break;
-                        if (page > 500) break;
-                    }
-
-                    page += 1;
-                    if (all.length >= total) break;
-                }
-
-                if (!cancelled) setOrders(all);
+                if (!cancelled) setOrders(mapped);
             } catch (e) {
-                if (!cancelled) setErr(e?.response?.data?.message || e.message || "Không tải được danh sách đơn.");
+                if (!cancelled)
+                    setErr(e?.response?.data?.message || e.message || "Không tải được danh sách đơn.");
             } finally {
                 if (!cancelled) setLoading(false);
             }
         })();
-        return () => { cancelled = true; };
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
+
 
 
     const filtered = useMemo(() => {
@@ -378,34 +417,15 @@ export default function AdminOrdersAll() {
 
 
 
-    // =================== ✅ CHANGE 1: LOADING UI ===================
-    // if (loading) {
-    //     return (
-    //         // ✅ CHANGE: tách nền full width
-    //         <div className="min-h-screen w-full bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900">
 
-    //             {/* ✅ CHANGE: container fluid + max-width + padding responsive */}
-    //             <div className="mx-auto w-full max-w-[1440px] px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)]">
-    //                 <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
-    //                     <div className="text-[clamp(20px,2.4vw,28px)] font-semibold"> Orders</div>
-    //                     <div className="mt-6 grid gap-4">
-    //                         {Array.from({ length: 8 }).map((_, i) => (
-    //                             <div key={i} className="h-20 rounded-2xl bg-white/10 animate-pulse" />
-    //                         ))}
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
 
 
     if (loading) {
         return (
-           
-            <div className="min-h-screen  overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 w-330 ">
-                
-                <div className="mx-auto    px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)] w-330">
+
+            <div className="min-h-screen  overflow-x-hidden bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 w-380 ">
+
+                <div className="mx-auto    px-3 sm:px-4 lg:px-6 py-[clamp(16px,3vw,28px)] w-380">
                     <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur text-white">
                         <div className="text-[clamp(20px,2.4vw,28px)] font-semibold">Orders</div>
                         <div className="mt-6 grid gap-4">
@@ -421,7 +441,7 @@ export default function AdminOrdersAll() {
 
 
     return (
-        <div className="rounded-3xl min-h-screen  mt-6 mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)] w-280">
+        <div className="rounded-3xl min-h-screen  mt-6 mx-auto bg-gradient-to-br from-purple-900 via-indigo-900 to-fuchsia-900 p-[clamp(16px,3vw,28px)] w-380">
 
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur ">
                 <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -708,7 +728,7 @@ export default function AdminOrdersAll() {
                                 ) : (
                                     <tr>
                                         <td colSpan={9} className="px-5 py-8 text-center text-[clamp(12px,1.8vw,18px)] text-white/70">
-                                            Không có đơn phù hợp
+
                                         </td>
                                     </tr>
                                 )}
@@ -717,9 +737,7 @@ export default function AdminOrdersAll() {
                     </div>
                 </div>
 
-                <div className="mt-6 text-[clamp(12px,1.8vw,18px)] text-white/60">
-                    <p>Hiển thị tất cả đơn trên một trang. Dùng bộ lọc/tìm kiếm/sắp xếp ở phía client để thao tác nhanh.</p>
-                </div>
+
             </div>
         </div>
     );
