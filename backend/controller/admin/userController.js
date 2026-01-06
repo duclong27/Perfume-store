@@ -60,16 +60,16 @@ const loginUserController = async (req, res) => {
 
 const loginAdminOrStaffController = async (req, res, next) => {
   try {
-    // ✅ DEMO MODE: dùng cứng nếu body không có
+    
     const email =
       typeof req.body?.email === "string" && req.body.email.trim()
         ? req.body.email.trim()
-        : "thuyadmin1@gmail.com";   // 🔴 đổi email demo tại đây
+        : "thuyadmin1@gmail.com";  
 
     const password =
       typeof req.body?.password === "string" && req.body.password
         ? req.body.password
-        : "thuyadmin1";           // 🔴 đổi password demo tại đây
+        : "thuyadmin1";           
 
     console.log("[LOGIN.DEMO]", { email, password: "***" });
 
