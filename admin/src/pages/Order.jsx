@@ -193,8 +193,8 @@ export default function AdminOrdersAll() {
                 setLoading(true);
                 setErr("");
 
-                const PAGE_SIZE = 1000;
-                let page = 1;
+                const PAGE_SIZE = 20;
+                let page = 50;
                 let all = [];
                 let total = Infinity;
 
