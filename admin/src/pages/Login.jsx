@@ -17,33 +17,110 @@ export default function AdminLoginForm({ setToken }) {
     const from = location.state?.from?.pathname || "/admin/dashboard";
 
 
+    // async function onSubmit(e) {
+    //     console.log("[API] baseURL =", api.defaults.baseURL);
+    //     e.preventDefault();
+    //     console.log("[LOGIN] full URL =", api.defaults.baseURL + "/api/user/loginAdminOrStaff");
+    //     if (loading) return;
+    //     setError("");
+    //     setLoading(true);
+
+    //     try {
+    //         console.groupCollapsed("%c[LOGIN] start", "color:#a78bfa");
+    //         console.log("API_BASE:", api.defaults.baseURL);
+    //         console.log("endpoint:", "/api/user/loginAdminOrStaff");
+    //         console.groupEnd();
+
+    //         const payload = {
+    //             email: email.trim(),
+    //             password: password.trim(),
+    //             remember,
+    //         };
+
+    //         const { data } = await api.post("/api/user/loginAdminOrStaff", payload);
+
+    //         if (!data?.token) {
+    //             throw new Error("Không nhận được token từ server");
+    //         }
+
+
+    //         if (remember) {
+    //             localStorage.setItem("token", data.token);
+    //             sessionStorage.removeItem("token");
+    //         } else {
+    //             sessionStorage.setItem("token", data.token);
+    //             localStorage.removeItem("token");
+    //         }
+
+    //         setToken(data.token);
+    //         navigate(from, { replace: true });
+    //     } catch (err) {
+    //         if (axios.isAxiosError(err)) {
+    //             if (!err.response) {
+
+    //                 setError("Network error: không thể kết nối server. Kiểm tra API URL/CORS/backend.");
+    //                 console.error("[AXIOS NETWORK ERROR]", err.message, err.code, err.toJSON?.());
+    //             } else {
+    //                 const msg = err.response.data?.message || `HTTP ${err.response.status}`;
+    //                 setError(msg);
+    //             }
+    //         } else {
+    //             setError(err?.message || "Login failed");
+    //         }
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+
+
+
     async function onSubmit(e) {
-        console.log("[API] baseURL =", api.defaults.baseURL);
         e.preventDefault();
-        console.log("[LOGIN] full URL =", api.defaults.baseURL + "/api/user/loginAdminOrStaff");
+
+        // ✅ LOG 0: baseURL + endpoint
+        const endpoint = "/api/user/loginAdminOrStaff";
+        console.log("[API] baseURL =", api.defaults.baseURL);
+        console.log("[LOGIN] endpoint =", endpoint);
+        console.log("[LOGIN] full URL (approx) =", (api.defaults.baseURL || "") + endpoint);
+
         if (loading) return;
         setError("");
         setLoading(true);
 
+        // ✅ LOG 1: payload (che password)
+        const payload = {
+            email: (email || "").trim(),
+            password: (password || "").trim(),
+            remember: !!remember,
+        };
+
+        console.log("[LOGIN] payload =", {
+            ...payload,
+            password: payload.password ? `*** (len=${payload.password.length})` : "(empty)",
+        });
+
         try {
             console.groupCollapsed("%c[LOGIN] start", "color:#a78bfa");
             console.log("API_BASE:", api.defaults.baseURL);
-            console.log("endpoint:", "/api/user/loginAdminOrStaff");
+            console.log("endpoint:", endpoint);
+            console.log("payloadKeys:", Object.keys(payload));
             console.groupEnd();
 
-            const payload = {
-                email: email.trim(),
-                password: password.trim(),
-                remember,
-            };
+            // ✅ LOG 2: gửi request với headers rõ ràng (để chắc chắn server parse được)
+            const { data } = await api.post(endpoint, payload, {
+                headers: { "Content-Type": "application/json" },
+            });
 
-            const { data } = await api.post("/api/user/loginAdminOrStaff", payload);
+            console.log("[LOGIN] response data keys =", Object.keys(data || {}));
+            console.log("[LOGIN] token preview =", data?.token ? String(data.token).slice(0, 16) + "..." : null);
 
             if (!data?.token) {
                 throw new Error("Không nhận được token từ server");
             }
 
-          
+            // ✅ LOG 3: lưu token
+            console.log("[LOGIN] remember =", !!remember, "-> store token to", remember ? "localStorage" : "sessionStorage");
+
             if (remember) {
                 localStorage.setItem("token", data.token);
                 sessionStorage.removeItem("token");
@@ -55,16 +132,28 @@ export default function AdminLoginForm({ setToken }) {
             setToken(data.token);
             navigate(from, { replace: true });
         } catch (err) {
+            // ✅ LOG 4: log đầy đủ axios error để biết server trả gì
             if (axios.isAxiosError(err)) {
+                console.error("[LOGIN] axios error", {
+                    message: err.message,
+                    code: err.code,
+                    status: err.response?.status,
+                    responseData: err.response?.data,
+                    requestUrl: (err.config?.baseURL || "") + (err.config?.url || ""),
+                    method: err.config?.method,
+                    // data ở đây là payload mà axios đã nhận (đôi khi là string JSON)
+                    sentData: err.config?.data,
+                    sentHeaders: err.config?.headers,
+                });
+
                 if (!err.response) {
-               
                     setError("Network error: không thể kết nối server. Kiểm tra API URL/CORS/backend.");
-                    console.error("[AXIOS NETWORK ERROR]", err.message, err.code, err.toJSON?.());
                 } else {
                     const msg = err.response.data?.message || `HTTP ${err.response.status}`;
                     setError(msg);
                 }
             } else {
+                console.error("[LOGIN] non-axios error", err);
                 setError(err?.message || "Login failed");
             }
         } finally {

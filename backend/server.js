@@ -90,7 +90,7 @@
 // export default app;
 
 
-// server.js
+
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -118,48 +118,58 @@ import dashboardRouter from "./routes/admin/dashboardRouter.js";
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
-/** ✅ FIX: “dấu vân tay” để biết Render có đang chạy đúng file server.js này không
- *  - Tác dụng: Nếu bạn không thấy log này trong Render Logs => Render đang chạy file khác.
- */
 console.log("✅ BOOT FILE = server.js");
 console.log("✅ NODE_ENV =", process.env.NODE_ENV, "| PORT =", process.env.PORT);
 
-/** ✅ FIX: trust proxy (giữ như bạn) */
 app.set("trust proxy", 1);
 
-/** ✅ FIX: Body parser MUST be before routes
- *  - Tác dụng: req.body có dữ liệu cho controller (hết lỗi hasBody:false).
- */
-app.use(express.json({ limit: "1mb" })); // ✅ FIX: thêm limit
-app.use(express.urlencoded({ extended: true })); // ✅ FIX: an toàn cho form-encoded
-
-/** ✅ FIX: CORS cấu hình rõ origin (khuyên dùng)
- *  - Tác dụng: tránh CORS “hên xui”, ổn định khi FE trên Vercel gọi sang Render.
- *  - Bạn có thể thêm domain Vercel khác nếu có.
- */
 const allowOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
+  "http://localhost:4000",
   "https://perfume-store-lac.vercel.app",
   "https://perfume-store-vsw5.vercel.app",
 ];
 
+// ✅ CORS nên đặt trước để xử lý OPTIONS/preflight rõ ràng
 app.use(
   cors({
     origin(origin, cb) {
-      // cho phép tool/Postman/no-origin
-      if (!origin) return cb(null, true);
+      if (!origin) return cb(null, true); // Postman/tool
       if (allowOrigins.includes(origin)) return cb(null, true);
       return cb(new Error("CORS blocked: " + origin), false);
     },
     credentials: false,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-/** ✅ FIX: debug middleware sau body parser để xác nhận body có vào thật
- *  - Tác dụng: Khi login, Render Logs sẽ in ra bodyKeys => biết FE gửi đúng/sai.
- *  - Che password để an toàn.
- */
+// ✅ Body parser
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ LOG CHUẨN: chỉ 1 lần (bỏ cái log trùng của bạn)
+app.use((req, res, next) => {
+  const ct = req.headers["content-type"];
+  const cl = req.headers["content-length"];
+
+  console.log("[REQ]", {
+    method: req.method,
+    url: req.originalUrl,
+    contentType: ct,
+    contentLength: cl,
+    hasBody: !!cl && cl !== "0",
+    origin: req.headers.origin,
+  });
+
+  if (!["GET", "HEAD", "OPTIONS"].includes(req.method)) {
+    console.log("[REQ.BODY]", req.body);
+  }
+
+  next();
+});
+
+// ✅ Debug riêng cho login (giữ lại)
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/user/loginAdminOrStaff") {
     const b = req.body || {};
@@ -173,24 +183,20 @@ app.use((req, res, next) => {
   next();
 });
 
-/** ✅ Health check */
 app.get("/", (req, res) => res.send("API Working"));
 
-/** Static images (giữ như bạn) */
 app.use(
   "/images",
   express.static(path.join(process.cwd(), "public", "images"), {
     setHeaders: (res, filePath) => {
-      if (filePath.endsWith(".avif")) {
-        res.setHeader("Content-Type", "image/avif");
-      }
+      if (filePath.endsWith(".avif")) res.setHeader("Content-Type", "image/avif");
       res.setHeader("Cache-Control", "no-store");
       res.setHeader("Vary", "Accept");
     },
   })
 );
 
-/** Routes (giữ nguyên paths của bạn) */
+
 app.use("/internal/order", router);
 
 app.use("/api/productVariant", productVariantRouter);
@@ -210,15 +216,15 @@ app.use("/internal/address", addressRouter);
 app.use("/internal/checkout", checkoutPlaceRouter);
 app.use("/internal/vnpay", vnpayReturnRouter);
 
-/** ✅ (Optional nhưng hay) error handler cho CORS/JSON parse error */
+
 app.use((err, req, res, next) => {
-  // JSON parse error
+
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     console.error("❌ Invalid JSON:", err.message);
     return res.status(400).json({ success: false, message: "Invalid JSON body" });
   }
 
-  // CORS blocked
+
   if (String(err?.message || "").startsWith("CORS blocked:")) {
     console.error("❌", err.message);
     return res.status(403).json({ success: false, message: err.message });
@@ -227,7 +233,7 @@ app.use((err, req, res, next) => {
   return next(err);
 });
 
-/** Start server after DB connect (giữ như bạn) */
+
 (async () => {
   try {
     await sequelize.authenticate();
