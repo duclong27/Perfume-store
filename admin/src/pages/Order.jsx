@@ -235,7 +235,7 @@ export default function AdminOrdersAll() {
     // }, []);
 
 
-
+    //new order fetch
     useEffect(() => {
         let cancelled = false;
 
