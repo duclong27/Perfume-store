@@ -1033,14 +1033,19 @@ export default function AdminAccountPage() {
             {/* Table */}
             <div className="w-full overflow-hidden rounded-2xl border border-white/10">
                 {/* Header */}
-                <div className="hidden lg:grid grid-cols-8 gap-0 bg-white/5 text-slate-300 text-[clamp(12px,1.6vw,16px)] font-semibold px-[clamp(12px,2vw,24px)] py-[clamp(12px,1.6vw,16px)]">
+                <div
+                    className="hidden lg:grid grid-cols-[72px_1.2fr_1.4fr_2.2fr_2.2fr_160px] gap-0
+             bg-white/5 text-slate-300 text-[clamp(12px,1.6vw,16px)] font-semibold
+             px-[clamp(12px,2vw,24px)] py-[clamp(12px,1.6vw,16px)]"
+                >
                     <div>#</div>
-                    <div className="col-span-2">User</div>
-                    <div className="col-span-2">Email</div>
+                    <div>User</div>
+                    <div>Email</div>
                     <div>Role</div>
                     <div>Status</div>
                     <div className="text-center">Action</div>
                 </div>
+
 
                 {/* Rows */}
                 <div className="divide-y divide-white/10">
