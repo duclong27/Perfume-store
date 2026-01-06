@@ -162,12 +162,36 @@ app.use((req, res, next) => {
     origin: req.headers.origin,
   });
 
-  if (!["GET", "HEAD", "OPTIONS"].includes(req.method)) {
-    console.log("[REQ.BODY]", req.body);
+  // ✅ chỉ log sâu cho login route
+  if (req.method === "POST" && req.originalUrl === "/api/user/loginAdminOrStaff") {
+    const b = req.body || {};
+
+    const emailRaw = b.email;
+    const passRaw = b.password;
+
+    const email = typeof emailRaw === "string" ? emailRaw.trim() : "";
+    const password = typeof passRaw === "string" ? passRaw : "";
+
+    console.log("[LOGIN.BODY.CHECK]", {
+      bodyType: typeof req.body,
+      bodyKeys: Object.keys(b),
+
+      emailType: typeof emailRaw,
+      emailLen: email.length,
+      emailPreview: email ? `${email.slice(0, 2)}***@***` : undefined,
+
+      passwordType: typeof passRaw,
+      passwordLen: password.length,
+      passwordMasked: password ? "***" : undefined,
+    });
+
+    // Nếu bạn muốn nhìn rõ email để chắc chắn (OK), nhưng vẫn che pass:
+    console.log("[LOGIN.BODY.SAFE]", { email, password: password ? "***" : undefined });
   }
 
   next();
 });
+
 
 // ✅ Debug riêng cho login (giữ lại)
 app.use((req, res, next) => {
