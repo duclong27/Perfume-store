@@ -59,68 +59,43 @@ const loginUserController = async (req, res) => {
 
 
 const loginAdminOrStaffController = async (req, res, next) => {
-    // ✅ LOG 0: log ngay khi controller được hit (biết chắc request đã vào controller)
-    console.log("[LOGIN] HIT", {
-        method: req.method,
-        path: req.originalUrl,
-        ip: req.ip,
-        contentType: req.headers["content-type"],
-        origin: req.headers.origin,
-        hasBody: !!req.body,
-        bodyKeys: Object.keys(req.body || {}),
+  try {
+    // ✅ DEMO MODE: dùng cứng nếu body không có
+    const email =
+      typeof req.body?.email === "string" && req.body.email.trim()
+        ? req.body.email.trim()
+        : "thuyadmin1@gmail.com";   // 🔴 đổi email demo tại đây
+
+    const password =
+      typeof req.body?.password === "string" && req.body.password
+        ? req.body.password
+        : "thuyadmin1";           // 🔴 đổi password demo tại đây
+
+    console.log("[LOGIN.DEMO]", { email, password: "***" });
+
+    const { token, user } = await loginAdminOrStaffService({ email, password });
+
+    return res.status(200).json({
+      success: true,
+      token,
+      user,
     });
+  } catch (err) {
+    const status = err.status || 500;
+    let message = "Server error during login";
 
-    // ✅ LOG 1: log body đã sanitize (che password)
-    const raw = req.body || {};
-    console.log("[LOGIN] BODY(safe)", {
-        email: raw.email,
-        password: raw.password ? "***" : undefined, // ✅ che
-        // log thêm các field lạ nếu FE gửi sai key
-        extraKeys: Object.keys(raw).filter((k) => !["email", "password"].includes(k)),
+    if (status === 401 || status === 404)
+      message = "Invalid email or password";
+    if (status === 403)
+      message = err.message || "Forbidden";
+
+    console.error("Login admin/staff error:", err);
+
+    return res.status(status).json({
+      success: false,
+      message,
     });
-
-    try {
-        const { email = "", password = "" } = req.body || {};
-
-        // ✅ LOG 2: log validate input “nhẹ”
-        console.log("[LOGIN] PARSED", {
-            emailType: typeof email,
-            passwordType: typeof password,
-            emailLen: typeof email === "string" ? email.trim().length : null,
-            passwordLen: typeof password === "string" ? password.length : null,
-        });
-
-        const { token, user } = await loginAdminOrStaffService({ email, password });
-
-        // ✅ LOG 3: log success (không log token full)
-        console.log("[LOGIN] OK", {
-            userId: user?.id || user?._id || user?.userId,
-            email: user?.email,
-            tokenPreview: token ? `${String(token).slice(0, 16)}...` : null,
-        });
-
-        return res.status(200).json({ success: true, token, user });
-    } catch (err) {
-        const status = err.status || err.statusCode || 500;
-
-        // ✅ LOG 4: log error chi tiết (đặc biệt hữu ích khi 400)
-        console.error("[LOGIN] ERROR", {
-            status,
-            name: err?.name,
-            message: err?.message,
-            // nếu bạn dùng validation lib (zod/joi/express-validator) thì thường có field này
-            details: err?.errors || err?.details || err?.issues,
-            stack: err?.stack,
-        });
-
-        let message = "Server error during login";
-        if (status === 400) message = err.message || "Bad request"; // ✅ thêm case 400
-        if (status === 401) message = "Invalid email or password";
-        if (status === 403) message = err.message || "Forbidden";
-        if (status === 404) message = "Invalid email or password";
-
-        return res.status(status).json({ success: false, message });
-    }
+  }
 };
 
 
