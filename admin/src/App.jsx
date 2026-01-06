@@ -25,27 +25,144 @@ import AddAccountPage from "./pages/AddAccount";
 // export const backendUrl =
 //   import.meta.env.VITE_API_BASE_URL  ;
 
-export const backendUrl =
-  import.meta.env.VITE_BACKEND_URL;
+// export const backendUrl =
+//   import.meta.env.VITE_BACKEND_URL;
 
+
+// export const api = axios.create({
+//   baseURL: backendUrl.replace(/\/+$/, ""),
+//   withCredentials: false,
+// });
+
+
+// console.log("[API] baseURL =", api.defaults.baseURL);
+
+
+
+
+
+// function ProtectedRoute({ token }) {
+//   if (!token) return <Navigate to="/login" replace />;
+//   return <Outlet />;
+// }
+
+
+// function AdminLayout({ onLogout }) {
+//   return (
+//     <div className="flex w-full">
+//       <Sidebar onLogout={onLogout} />
+//       <main className="flex-1 ml-[20rem] mr-2 p-1 min-h-screen">
+//         <Outlet />
+//       </main>
+//     </div>
+//   );
+// }
+
+// export default function App() {
+
+//   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+
+//   useEffect(() => {
+//     if (token) localStorage.setItem("token", token);
+//     else localStorage.removeItem("token");
+//   }, [token]);
+
+//   const handleLogout = () => setToken("");
+
+//   return (
+//     <div className="relative flex min-h-screen overflow-hidden text-white">
+//       <ToastContainer position="top-right" autoClose={2500} theme="dark" />
+
+//       <div className="absolute inset-0 -z-50 bg-gradient-to-br from-[#1a1240] via-[#2a1b6a] to-[#6a31d0]" />
+//       <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-[#8b5cf6] opacity-30 blur-3xl" />
+//       <div className="pointer-events-none absolute right-[-120px] top-24 h-[28rem] w-[28rem] rounded-full bg-[#a78bfa] opacity-25 blur-3xl" />
+//       <div className="pointer-events-none absolute bottom-[-140px] left-32 h-[26rem] w-[26rem] rounded-full bg-[#7c3aed] opacity-20 blur-3xl" />
+//       <div className="pointer-events-none absolute -top-40 -left-40 h-[30rem] w-[30rem] rounded-full bg-fuchsia-500 opacity-30 blur-[150px]" />
+//       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-violet-600 opacity-30 blur-[150px]" />
+
+//       <Routes>
+
+//         <Route
+//           path="/login"
+//           element={
+//             token
+//               ? <Navigate to="/admin/dashboard" replace />
+//               : <Login setToken={setToken} />
+//           }
+//         />
+
+
+//         <Route element={<ProtectedRoute token={token} />}>
+//           <Route element={<AdminLayout onLogout={handleLogout} />}>
+//             <Route>
+//               <Route path="/admin/addAccount" element={<AddAccountPage />} />
+//               <Route path="/admin/account" element={<AdminAccounts />} />
+//               <Route path="/admin/order" element={<Order />} />
+//               <Route path="/admin/dashboard" element={<Dashboard />} />
+//               <Route path="/admin/product" element={<Product />} />
+//               <Route path="/admin/category" element={<Category />} />
+//               <Route path="/admin/addCategory" element={<AddCategory />} />
+//               <Route path="/admin/variantProduct" element={<VariantProduct />} />
+//               <Route path="/admin/addVariant" element={<AddVariant />} />
+//               <Route path="/admin/editCategory/:id" element={<EditCategory />} />
+//               <Route path="/admin/editVariant/:id" element={<EditVariant />} />
+//               <Route path="/admin/addProduct" element={<AddProductForm />} />
+//               <Route path="/admin/editProduct/:id" element={<EditProduct />} />
+
+//             </Route>
+//           </Route>
+//         </Route>
+
+//         {/* Fallback */}
+//         <Route path="*" element={<Navigate to={token ? "/admin/dashboard" : "/login"} replace />} />
+//       </Routes>
+//     </div>
+//   );
+// }
+
+
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const api = axios.create({
-  baseURL: backendUrl.replace(/\/+$/, ""),
+  baseURL: (backendUrl || "").replace(/\/+$/, ""),
   withCredentials: false,
 });
 
-
 console.log("[API] baseURL =", api.defaults.baseURL);
 
+/** ✅ FIX: helper đọc token từ BOTH localStorage & sessionStorage
+ *  - Tác dụng: nếu login form có "remember=false" và lưu sessionStorage,
+ *    app vẫn đọc được token (không bị đá về /login).
+ */
+function getStoredToken() {
+  return localStorage.getItem("token") || sessionStorage.getItem("token") || "";
+}
 
+/** ✅ FIX: helper xóa token ở cả 2 nơi
+ *  - Tác dụng: logout sạch sẽ, không bị “token ma”.
+ */
+function clearStoredToken() {
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+}
 
-
+/** ✅ FIX: helper lưu token theo remember
+ *  - Tác dụng: đồng bộ cách lưu token giữa Login và App.
+ */
+function setStoredToken(token, remember = true) {
+  if (remember) {
+    localStorage.setItem("token", token);
+    sessionStorage.removeItem("token");
+  } else {
+    sessionStorage.setItem("token", token);
+    localStorage.removeItem("token");
+  }
+}
 
 function ProtectedRoute({ token }) {
   if (!token) return <Navigate to="/login" replace />;
   return <Outlet />;
 }
-
 
 function AdminLayout({ onLogout }) {
   return (
@@ -59,15 +176,79 @@ function AdminLayout({ onLogout }) {
 }
 
 export default function App() {
-
-  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  /** ✅ FIX: token init đọc từ cả localStorage + sessionStorage */
+  const [token, setToken] = useState(() => getStoredToken()); // ✅ FIX
+  /** ✅ FIX: booting để chặn redirect về /login trước khi auto-login xong */
+  const [booting, setBooting] = useState(true); // ✅ FIX
 
   useEffect(() => {
-    if (token) localStorage.setItem("token", token);
-    else localStorage.removeItem("token");
-  }, [token]);
+    const bootstrap = async () => {
+      try {
+        const existing = getStoredToken();
+        if (existing) {
+          setToken(existing);
+          return;
+        }
 
-  const handleLogout = () => setToken("");
+        /** ✅ FIX: AUTO CALL demo login ngay khi app load
+         *  - Tác dụng: HR mở link → token trống → app tự lấy token → vào dashboard,
+         *    không cần bấm login.
+         *
+         *  ⚠️ Bạn CHỈ cần chỉnh đúng endpoint ở đây.
+         *  Nếu BE của bạn là /auth/demo-admin thì đổi lại tương ứng.
+         */
+        const DEMO_ENDPOINT = "/api/user/demoAdminLogin"; // ✅ FIX (đổi nếu backend khác)
+        console.log("[BOOT] calling:", DEMO_ENDPOINT); // ✅ FIX: dễ debug
+
+        // Gửi payload tối thiểu. Nhiều demo-login không cần email/pass.
+        const { data } = await api.post(DEMO_ENDPOINT, {
+          email: "",
+          password: "",
+          remember: true,
+        }); // ✅ FIX
+
+        const t = data?.token || data?.accessToken;
+        if (t) {
+          setStoredToken(t, true); // ✅ FIX: lưu token để refresh vẫn vào được
+          setToken(t); // ✅ FIX: set state để ProtectedRoute cho vào
+        } else {
+          setToken("");
+        }
+      } catch (e) {
+        console.error(
+          "[BOOT] demo auto-login failed:",
+          e?.response?.status,
+          e?.response?.data || e
+        ); // ✅ FIX: log rõ lỗi (404/401/CORS)
+        clearStoredToken(); // ✅ FIX
+        setToken(""); // ✅ FIX
+      } finally {
+        setBooting(false); // ✅ FIX: kết thúc booting để bắt đầu render Routes
+      }
+    };
+
+    bootstrap();
+  }, []);
+
+  /** ✅ FIX: bỏ useEffect cũ ghi đè localStorage theo token
+   *  - Vì giờ token có thể nằm ở sessionStorage (remember=false).
+   *  - Việc “mỗi lần token change là localStorage.setItem” sẽ phá logic remember.
+   *
+   *  -> Không cần nữa vì Login form đã lưu token đúng chỗ,
+   *     bootstrap cũng đã lưu token đúng chỗ.
+   */
+
+  const handleLogout = () => {
+    clearStoredToken(); // ✅ FIX: logout sạch
+    setToken(""); // ✅ FIX: ProtectedRoute sẽ đá về /login
+  };
+
+  /** ✅ FIX: Cực quan trọng
+   *  - Tác dụng: Trong lúc đang auto-login (booting=true),
+   *    nếu render Routes ngay, ProtectedRoute sẽ thấy token rỗng và đá /login.
+   *    => nên return null/spinner cho đến khi bootstrap xong.
+   */
+  if (booting) return null; // ✅ FIX (có thể thay bằng spinner)
 
   return (
     <div className="relative flex min-h-screen overflow-hidden text-white">
@@ -81,40 +262,42 @@ export default function App() {
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full bg-violet-600 opacity-30 blur-[150px]" />
 
       <Routes>
-
         <Route
           path="/login"
           element={
-            token
-              ? <Navigate to="/admin/dashboard" replace />
-              : <Login setToken={setToken} />
+            token ? (
+              <Navigate to="/admin/dashboard" replace />
+            ) : (
+              /** ✅ FIX: Login khi thành công nên gọi setToken và lưu token đúng storage
+               *  - Bên dưới mình sẽ viết lại file Login form (AdminLoginForm) tương ứng.
+               */
+              <Login setToken={setToken} />
+            )
           }
         />
 
-
         <Route element={<ProtectedRoute token={token} />}>
           <Route element={<AdminLayout onLogout={handleLogout} />}>
-            <Route>
-              <Route path="/admin/addAccount" element={<AddAccountPage />} />
-              <Route path="/admin/account" element={<AdminAccounts />} />
-              <Route path="/admin/order" element={<Order />} />
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/product" element={<Product />} />
-              <Route path="/admin/category" element={<Category />} />
-              <Route path="/admin/addCategory" element={<AddCategory />} />
-              <Route path="/admin/variantProduct" element={<VariantProduct />} />
-              <Route path="/admin/addVariant" element={<AddVariant />} />
-              <Route path="/admin/editCategory/:id" element={<EditCategory />} />
-              <Route path="/admin/editVariant/:id" element={<EditVariant />} />
-              <Route path="/admin/addProduct" element={<AddProductForm />} />
-              <Route path="/admin/editProduct/:id" element={<EditProduct />} />
-
-            </Route>
+            <Route path="/admin/addAccount" element={<AddAccountPage />} />
+            <Route path="/admin/account" element={<AdminAccounts />} />
+            <Route path="/admin/order" element={<Order />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/product" element={<Product />} />
+            <Route path="/admin/category" element={<Category />} />
+            <Route path="/admin/addCategory" element={<AddCategory />} />
+            <Route path="/admin/variantProduct" element={<VariantProduct />} />
+            <Route path="/admin/addVariant" element={<AddVariant />} />
+            <Route path="/admin/editCategory/:id" element={<EditCategory />} />
+            <Route path="/admin/editVariant/:id" element={<EditVariant />} />
+            <Route path="/admin/addProduct" element={<AddProductForm />} />
+            <Route path="/admin/editProduct/:id" element={<EditProduct />} />
           </Route>
         </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to={token ? "/admin/dashboard" : "/login"} replace />} />
+        <Route
+          path="*"
+          element={<Navigate to={token ? "/admin/dashboard" : "/login"} replace />}
+        />
       </Routes>
     </div>
   );

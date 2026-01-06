@@ -4,11 +4,11 @@ import path from "path";
 
 import "dotenv/config";
 import { sequelize } from "./config/sequelize.js";
-import connectCloudinary from "./config/cloudinary.js";
-
 import categoryRouter from "./routes/admin/categoryRouter.js";
 import productRouter from "./routes/admin/productRouter.js";
+
 import userRouter from "./routes/admin/userRouter.js";
+
 import adminRouter from "./routes/admin/orderRouter.js";
 import productVariantRouter from "./routes/admin/variantProductRouter.js";
 import cartItemRouter from "./routes/internal/cartItemRouter.js";
@@ -58,7 +58,9 @@ app.use(
 app.use("/internal/order",router)
 app.use("/api/productVariant", productVariantRouter);
 app.use("/api/category", categoryRouter);
+
 app.use("/api/user", userRouter);
+
 app.use("/api/product", productRouter);
 app.use("/api/customer", newUserRouter);
 app.use("/api/order", adminRouter);
