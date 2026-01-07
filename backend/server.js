@@ -271,6 +271,39 @@
 
 // export default app;
 
+
+
+
+
+
+
+
+
+import express from "express";
+import cors from "cors";
+import path from "path";
+import "dotenv/config";
+
+import { sequelize } from "./config/sequelize.js";
+
+import categoryRouter from "./routes/admin/categoryRouter.js";
+import productRouter from "./routes/admin/productRouter.js";
+import userRouter from "./routes/admin/userRouter.js";
+import adminRouter from "./routes/admin/orderRouter.js";
+import productVariantRouter from "./routes/admin/variantProductRouter.js";
+import cartItemRouter from "./routes/internal/cartItemRouter.js";
+import cartRouter from "./routes/internal/cartRouter.js";
+import newUserRouter from "./routes/customer/authRouter.js";
+import customerRouter from "./routes/internal/userInternal.js";
+import checkoutRouter from "./routes/internal/checkoutInternalRouter.js";
+import addressRouter from "./routes/internal/addressRouter.js";
+import checkoutPlaceRouter from "./routes/internal/checkoutPlaceRouter.js";
+import vnpayReturnRouter from "./routes/internal/vnpayReturnRouter.js";
+import router from "./routes/internal/orderRouter.js";
+import accountRouter from "./routes/admin/accountRouter.js";
+import dashboardRouter from "./routes/admin/dashboardRouter.js";
+
+
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
