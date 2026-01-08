@@ -14,6 +14,7 @@ import path from "path";
 import "dotenv/config";
 
 import { sequelize } from "./config/sequelize.js";
+import "./model/index.js";
 
 import categoryRouter from "./routes/admin/categoryRouter.js";
 import productRouter from "./routes/admin/productRouter.js";
@@ -31,7 +32,7 @@ import vnpayReturnRouter from "./routes/internal/vnpayReturnRouter.js";
 import router from "./routes/internal/orderRouter.js";
 import accountRouter from "./routes/admin/accountRouter.js";
 import dashboardRouter from "./routes/admin/dashboardRouter.js";
-import "./model/index.js";
+
 
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
