@@ -63,9 +63,9 @@ export default function ContactPage() {
                             <h2 className="text-3xl font-extrabold">Get in touch</h2>
                             <p className="mt-2 text-neutral-600 text-xl">Reach us via any channel below.</p>
                             <div className="mt-6 space-y-4 text-xl">
-                                <Item icon={PhoneIcon} label="Phone" value="(+84) 0987 654 321" />
-                                <Item icon={MailIcon} label="Email" value="hello@yourbrand.com" />
-                                <Item icon={MapPinIcon} label="Address" value="123 Blossom St, District 1, HCMC" />
+                                <Item icon={PhoneIcon} label="Phone" value="(+84) 372590450" />
+                                <Item icon={MailIcon} label="Email" value="longpubg27@gmail.com" />
+                                <Item icon={MapPinIcon} label="Address" value="Nam Tu Liem, Ha Noi" />
                                 <Item icon={ClockIcon} label="Hours" value="Mon–Sat: 9:00–20:00 (UTC+7)" />
                             </div>
                             <div className="mt-6 flex items-center gap-3 text-xl">
