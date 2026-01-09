@@ -11,8 +11,13 @@ function clearToken() {
     try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); } catch { }
 }
 
+// export const api = axios.create({
+//     baseURL: (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/+$/, ""),
+//     withCredentials: false,
+// });
+
 export const api = axios.create({
-    baseURL: (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/+$/, ""),
+    baseURL: (import.meta.env.VITE_API_BASE_URL).replace(/\/+$/, ""),
     withCredentials: false,
 });
 

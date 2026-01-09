@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProduct from "../components/RelatedProduct";
-import ProductDescriptionReviewsLite from "@/components/productDescription";
+import ProductDescriptionReviewsLite from "../components/productDescription";
 
 import { api } from "../App.jsx";
 import { useCart } from "../context/CartContext";   // ✅ thay thế /// fix
