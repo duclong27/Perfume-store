@@ -1,5 +1,5 @@
 // export const API_ORIGIN = import.meta.env.VITE_BACKEND_URL || '';
-export const API_ORIGIN = import.meta.env.VITE_API_BASE_URL ;
+export const API_ORIGIN = import.meta.env.VITE_API_BASE_URL ; 
 export function resolveUrl(p) {
   try {
     return new URL(p, API_ORIGIN || window.location.origin).toString();

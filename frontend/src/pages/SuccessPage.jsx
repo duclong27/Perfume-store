@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { api } from "../api.js";
+import { normalizeImageUrl } from "../utils/imageUtils";
 
 export default function SuccessPage() {
     const { id: orderId } = useParams();
@@ -154,7 +155,7 @@ export default function SuccessPage() {
                                 {s.imageUrl ? (
                                     <div className="rounded-xl border p-4">
                                         <div className="text-sm text-slate-500 mb-2">QR chuyển khoản</div>
-                                        <img src={s.imageUrl} alt="QR chuyển khoản" className="w-full max-w-sm mx-auto rounded-lg border" />
+                                        <img src={normalizeImageUrl(s.imageUrl)} alt="QR chuyển khoản" className="w-full max-w-sm mx-auto rounded-lg border" />
                                     </div>
                                 ) : null}
                             </div>

@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { normalizeImageUrl } from "../utils/imageUtils";
 
 const toNumber = (val) => {
   if (val === " " || val == null) return null;
@@ -83,7 +84,7 @@ const ProductItem = ({ id, image, name, variants, currency, isEnable }) => {
     [variants, currencySymbol, forceContact]
   );
 
-  const imgSrc = Array.isArray(image) ? image[0] : image;
+  const imgSrc = normalizeImageUrl(Array.isArray(image) ? image[0] : image);
 
   // ribbon text: Contact nếu bị disable, ngược lại giữ nguyên logic cũ
   const ribbonText = forceContact ? "Contact" : isRange ? "Price range" : "Price";

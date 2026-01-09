@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { api } from "../api.js";
+import { normalizeImageUrl } from "../utils/imageUtils";
 
 const money = (n) =>
     Number(n || 0).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -495,7 +496,7 @@ export default function PreviewOrder() {
                                                     {bankTransferInstructions.imageUrl && (
                                                         <div className="mt-2">
                                                             <img
-                                                                src={bankTransferInstructions.imageUrl}
+                                                                src={normalizeImageUrl(bankTransferInstructions.imageUrl)}
                                                                 alt="QR chuyển khoản"
                                                                 className="max-h-56 rounded-lg border border-slate-200"
                                                             />
@@ -548,7 +549,7 @@ export default function PreviewOrder() {
                         <div className="space-y-3">
                             {itemsSorted.map((item) => {
                                 const name = item.displayName;
-                                const img = item.imageUrl;
+                                const img = normalizeImageUrl(item.imageUrl);
                                 const sku = item.sku;
                                 const sizeMl = item.capacityMl;
                                 const unit = Number(item.effectiveUnitPrice || 0);

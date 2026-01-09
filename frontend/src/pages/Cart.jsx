@@ -10,6 +10,7 @@
 import React, { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { normalizeImageUrl } from "../utils/imageUtils";
 
 /**
  * Cart page — render từ CartContext
@@ -31,10 +32,11 @@ const getDisplayName = (item = {}) => {
 };
 
 const getDisplayImage = (item = {}) => {
-    if (item?.imageUrl) return item.imageUrl;
+    if (item?.imageUrl) return normalizeImageUrl(item.imageUrl) || PLACEHOLDER_IMG;
     const v = item.variant || {};
     const p = v.product || {};
-    return v.imageUrl || v.image_url || p.imageUrl || p.image_url || PLACEHOLDER_IMG;
+    const imageUrl = v.imageUrl || v.image_url || p.imageUrl || p.image_url;
+    return normalizeImageUrl(imageUrl) || PLACEHOLDER_IMG;
 };
 
 const getSku = (item = {}) => item.sku || item.variant?.sku || "";

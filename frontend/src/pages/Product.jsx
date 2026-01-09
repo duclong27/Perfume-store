@@ -7,6 +7,7 @@ import ProductDescriptionReviewsLite from "../components/ProductDescription";
 
 import { api } from "../App.jsx";
 import { useCart } from "../context/CartContext";   // ✅ thay thế /// fix
+import { normalizeImageUrl } from "../utils/imageUtils";
 
 
 /* ----------------- helpers (rút gọn) ----------------- */
@@ -128,7 +129,7 @@ const Product = () => {
                 {/* Left Section: Images */}
                 <div className="  rounded-3xl bg-black backdrop-blur-md border border-white/10 p-8 sm:p-4 max-w-fit mx-auto items-center justify-center">
                     <img
-                        src={productData?.image}
+                        src={normalizeImageUrl(productData?.image)}
                         className=" w-full h-full max-w-[520px] aspect-[6/8] object-cover rounded-2xl shadow-2xl"
                         alt="Main Product"
                     />
