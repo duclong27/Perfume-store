@@ -1,4 +1,4 @@
-// controllers/productVariantController.js
+
 import { addVariantService, getAllVariantService, updateVariantService, getVariantByIdService } from "../../service/admin/variantProductService.js";
 
 export const addVariantController = async (req, res) => {
