@@ -59,13 +59,15 @@ Images
 
 
 
-🧩 Order Confirmation Page
-
-<img width="1864" height="859" alt="image" src="https://github.com/user-attachments/assets/8ed7865c-ca0a-4c62-8170-29643abdccb4" />
 
 
+🧩 Order VNPAY Page
+
+<img width="1873" height="874" alt="image" src="https://github.com/user-attachments/assets/ff0f5efd-a7b9-4aef-ba91-ccc897f39e30" />
 
 
+🧩 Success payment
+<img width="1876" height="861" alt="image" src="https://github.com/user-attachments/assets/335701a1-4610-4be8-8fd7-94d1211ba498" />
 
 
 
