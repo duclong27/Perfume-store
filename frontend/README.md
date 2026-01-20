@@ -69,6 +69,8 @@ Images
 🧩 Success payment
 <img width="1876" height="861" alt="image" src="https://github.com/user-attachments/assets/335701a1-4610-4be8-8fd7-94d1211ba498" />
 
+Link deploy: https://perfume-store-1.vercel.app/
+
 
 
 
