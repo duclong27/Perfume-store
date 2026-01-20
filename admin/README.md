@@ -54,3 +54,4 @@ Images
 
 <img width="1874" height="855" alt="image" src="https://github.com/user-attachments/assets/254d72e1-692f-4b20-ac96-8e668e0913b9" />
 
+Link deploy: perfume-store-lac.vercel.app
