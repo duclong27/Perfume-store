@@ -1,4 +1,4 @@
-# Perfume Store – Full-Stack E-Commerce System
+<img width="1901" height="863" alt="image" src="https://github.com/user-attachments/assets/623d6b86-d33c-4fdb-9b58-05ce953a9166" /># Perfume Store – Full-Stack E-Commerce System
 
 🧩 System Architecture Overview
 
@@ -22,6 +22,15 @@ The system consists of two frontends and two backends, where the Admin Backend a
   - Centralized MySQL database with relational schema and validations
 
 ---
+
+🤖 AI Assistant Integration
+
+The system integrates an AI Assistant to enhance customer experience:
+
+Provides product recommendations based on user needs
+Answers customer inquiries in real-time
+Assists in choosing suitable perfumes (e.g., scent type, occasion, budget)
+Improves engagement and conversion rate during the shopping process
 
 ## 🚀 Language and Tools
 
@@ -64,6 +73,7 @@ The system consists of two frontends and two backends, where the Admin Backend a
 - Order placement and cancellation
 - Checkout with **COD** and **online payment**
 - Order status tracking
+- AI-powered product consultation
 
 ### Admin Features
 - Category & product CRUD operations
@@ -111,8 +121,9 @@ The system consists of two frontends and two backends, where the Admin Backend a
 
 <img width="1878" height="854" alt="image" src="https://github.com/user-attachments/assets/44d451c3-9af7-49a9-8daa-da2099b02995" />
 
-
+🧩 AI Assitant
  
+<img width="1901" height="863" alt="Screenshot 2026-05-04 112936" src="https://github.com/user-attachments/assets/7f4cd4ae-3a35-4832-b640-f9c4f540c31d" />
 
 
 
