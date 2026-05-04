@@ -1,4 +1,4 @@
-<img width="1901" height="863" alt="image" src="https://github.com/user-attachments/assets/623d6b86-d33c-4fdb-9b58-05ce953a9166" /># Perfume Store – Full-Stack E-Commerce System
+
 
 🧩 System Architecture Overview
 
